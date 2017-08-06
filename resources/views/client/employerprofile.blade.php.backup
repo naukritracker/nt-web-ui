@@ -1,0 +1,29 @@
+<h1>HELLO</h1>
+
+@extends('templates.client.master')
+
+@section('content')
+<div id="employerprofilepage">
+    <div class="clearfix">
+        <div class="clearfix pad-t25pr pad-l50pr">
+            <i class="fa fa-circle-o-notch fa-spin green"></i>
+            <i class="fa fa-circle-o-notch fa-spin red"></i>
+            <i class="fa fa-circle-o-notch fa-spin blue"></i>
+            <p><b>Loading...</b></p>
+        </div>
+    </div>
+</div>
+@stop
+
+@section('js')
+    @parent
+    <script type="text/javascript">
+        var loader = $('#employerprofilepage').html();
+        $(document).ready(function () {
+            $.post('async/load/profile', {_token : token}, function (data) {
+                $('#employerprofilepage').html('');
+                $('#employerprofilepage').html(data);
+            });
+        });
+    </script>
+@stop

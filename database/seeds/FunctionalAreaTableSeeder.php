@@ -1,0 +1,113 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use App\Models\FunctionalArea;
+
+class FunctionalAreaTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        //
+        DB::table('functional_area')->truncate();
+
+        FunctionalArea::insert([
+        	['functional_area' => 'Accounting',
+        	'slug' => 'accounting'],
+        	['functional_area' => 'Interior Design',
+        	'slug' => 'interior-design'],
+        	['functional_area' => 'Bank',
+        	'slug' => 'bank'],
+        	['functional_area' => 'Content Writing',
+        	'slug' => 'content-writing'],
+        	['functional_area' => 'Consultant',
+        	'slug' => 'consultant'],
+        	['functional_area' => 'Engineering',
+        	'slug' => 'engineering'],
+        	['functional_area' => 'Export Import',
+        	'slug' => 'export-import'],
+        	['functional_area' => 'Merchandiser',
+        	'slug' => 'Merchandiser'],
+        	['functional_area' => 'Security',
+        	'slug' => 'security'],
+        	['functional_area' => 'HR',
+        	'slug' => 'hr'],
+        	['functional_area' => 'Hotel',
+        	'slug' => 'hotel'],
+        	['functional_area' => 'Application Programming',
+        	'slug' => 'application-programming'],
+        	['functional_area' => 'Client Server',
+        	'slug' => 'client-server'],
+        	['functional_area' => 'DBA',
+        	'slug' => 'dba'],
+        	['functional_area' => 'Ecommerce',
+        	'slug' => 'ecommerce'],
+        	['functional_area' => 'ERP',
+        	'slug' => 'erp'],
+        	['functional_area' => 'VLSI',
+        	'slug' => 'vlsi'],
+        	['functional_area' => 'Mainframe',
+        	'slug' => 'mainframe'],
+        	['functional_area' => 'Middleware',
+        	'slug' => 'middleware'],
+        	['functional_area' => 'Mobile',
+        	'slug' => 'mobile'],
+        	['functional_area' => 'Network Administrator',
+        	'slug' => 'network-administrator'],
+        	['functional_area' => 'IT',
+        	'slug' => 'it'],
+        	['functional_area' => 'Testing',
+        	'slug' => 'testing'],
+        	['functional_area' => 'System Programming',
+        	'slug' => 'system-programming'],
+        	['functional_area' => 'EDP',
+        	'slug' => 'edp'],
+        	['functional_area' => 'Telecom Software',
+        	'slug' => 'telecom-software'],
+        	['functional_area' => 'Telecom',
+        	'slug' => 'telecom'],
+        	['functional_area' => 'BPO',
+        	'slug' => 'bpo'],
+        	['functional_area' => 'Legal',
+        	'slug' => 'legal'],
+        	['functional_area' => 'Marketing',
+        	'slug' => 'marketing'],
+        	['functional_area' => 'Packaging',
+        	'slug' => 'packaging'],
+        	['functional_area' => 'Pharma',
+        	'slug' => 'pharma'],
+        	['functional_area' => 'Maintenance',
+        	'slug' => 'maintenance'],
+        	['functional_area' => 'Logistics',
+        	'slug' => 'logistics'],
+        	['functional_area' => 'Sales',
+        	'slug' => 'sales'],
+        	['functional_area' => 'Secretary',
+        	'slug' => 'secretary'],
+        	['functional_area' => 'Corporate Planning',
+        	'slug' => 'corporate-planning'],
+        	['functional_area' => 'Site Engineering',
+        	'slug' => 'site-engineering'],
+        	['functional_area' => 'Film',
+        	'slug' => 'film'],
+        	['functional_area' => 'Teacher',
+        	'slug' => 'teacher'],
+        	['functional_area' => 'Airline',
+        	'slug' => 'airline'],
+        	['functional_area' => 'Graphic Designer',
+        	'slug' => 'graphic-designer'],
+        	['functional_area' => 'Shipping',
+        	'slug' => 'shipping'],
+        	['functional_area' => 'Analytics',
+        	'slug' => 'analytics'],
+        	['functional_area' => 'Business Intelligence',
+        	'slug' => 'business-intelligence'],
+        	['functional_area' => 'Other',
+        	'slug' => 'other'],
+        	]);
+    }
+}

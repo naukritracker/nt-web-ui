@@ -1,0 +1,303 @@
+@extends('templates.client.master')
+
+@section('title')
+	Resume Search - Naukri Tracker
+@stop
+
+@section('meta')
+  @parent
+  <meta name="robots" content="index/follow">
+@stop
+
+@section('css')
+  @parent
+  {!!Html::style('assets/jquery-ui-1.11.4.custom/jquery-ui.min.css')!!}
+@stop
+
+@section('content')
+<section class="pad-t85 l-gray-box mar-b20 animated fadeInDown">
+<div class="container">
+	<div class="row os-h-search hmar5 mar-t20">
+    {!!Form::open(array('route'=>'ResumeSearch','id'=>'search_resumes_form'))!!}
+        <div class="col-sm-6 col-sm-offset-2 hpad5"><input type="text" name="search_value" @if(isset($search_value))  value="{{ $search_value }}" @endif class="form-control" placeholder="Search by Skills, Designation, etc." required></div>
+        <div class="col-sm-2 hpad5"><input type="submit" class="btn btn-primary btn-block" value="Search"></div>
+        <input type="hidden" name="location_list" id="location_list" value="{{ isset($location_list) ? $location_list : '' }}"/>
+        <input type="hidden" name="industry_list" id="industry_list" value="{{ isset($industry_list) ? $industry_list : '' }}"/>
+        <input type="hidden" name="functional_area_list" id="functional_area_list" value="{{ isset($functional_area_list) ? $functional_area_list : '' }}"/>
+    {!!Form::token()!!}
+    {!!Form::close()!!}
+    </div>
+</div>
+</section>    
+
+<div class="container">
+  <div class="row mar-b20">
+    <div class="col-sm-3 animated fadeInLeft">
+        <h4 class="sm-title  mar-t10">Filter By <span id="activatefilternow" class="pull-right"></span></h4>
+        <ul class="lhs-nav filter-block">
+            <input type="hidden" id="searchresumesdata" value="{{URL::route('LoadSearchResumesFilterData')}}">
+            <li><a href="javascript:void(0)" >Location</a></li>               
+             <div class="pad-l20 filter-div" id="location-box"></div>
+
+            <li ><a href="javascript:void(0)" >Areas of activity</a></li>
+             <div class="pad-l20 filter-div" id="industry-box"></div>
+
+            <li ><a href="javascript:void(0)" >Functional areas</a></li>
+             <div class="pad-l20 filter-div" id="functional-area-box"></div>
+        </ul>            
+    </div>
+
+    <div class="col-sm-9">
+        @if(count($candidates))
+            <div class="clearfix  animated fadeInUp">
+                <h4 class="sm-title mar-t10 pull-left mar-b15">{{ isset($availablejobs) ? ''.$availablejobs.' Job(s) Available' : ''}}</h4>
+                <div class="pull-right form-inline mar-b15">
+                    <p class="pull-left mar-r10 mar-t5">Sort by&nbsp;:&nbsp;</p>
+                    <select class="form-control pull-left" id="sortbyselection">
+                        <option value="updated_at" @if(isset($order) && $order=='updated_at') selected @endif>Date</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="l-jobs animated fadeInUp">
+                    @foreach($candidates as $candidate)
+                        <li>
+                            <div class="row">
+                                <p>
+                                    <a href="{{ URL::route('ShowResumeDetails',['id' => $candidate->id, 'search' => $search_value]) }}" class="sm-title"> {{$candidate->name}}</a>
+                                </p>
+                                <p class="xs-title">
+                                    @if(isset($candidate->userdetail->industries))
+                                        <i class="fa fa-industry"></i>
+                                        <span>{{$candidate->userdetail->industries->industry}}</span>
+                                    @endif
+                                    @if(isset($candidate->userdetail->functionalareas))
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <i class="fa fa-play-circle"></i>
+                                        <span>{{$candidate->userdetail->functionalareas->functional_area}}</span>
+                                    @endif
+                                    @if(isset($candidate->userdetail->updated_at))
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <i class="fa fa-clock-o"></i>
+                                        <span>{{$candidate->userdetail->updated_at->diffForHumans()}}</span>
+                                    @endif
+                                </p>
+
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                {!! $candidates->appends(['location_list' => isset($location_list) ? $location_list : '','industry_list' => isset($industry_list) ? $industry_list : ''])->render() !!}
+            </div>
+        @else
+            <div class="clearfix  animated rotateInUpLeft">
+                <h3 class="mar-t10 mar-b15 error-text"><i class="fa fa-times-circle-o"></i>  No candidates available at present</h3>
+                <p>Any and all candidatea will be listed here once they pass our <b>verification procedures</b>. This message is being displayed to you as our team is still reviewing the latest candidates that have been listed with us.</p>
+                <p><i>Thank You for your patience</i></p>
+                <p><i>Sincerely</i></p>
+                <p><i><b>Naukri Tracker</b></i></p>
+
+            </div>
+        @endif
+    </div>
+                              
+  </div>
+</div>
+@stop
+
+@section('js')
+	@parent
+  {!! Html::script('assets/js/slick.min.js') !!}
+  {!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui.min.js') !!}
+	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
+	<script type="text/javascript">
+  // Accordian
+        var action="click";
+        var speed="500";
+         //GLOBAL REQUIREMENTS
+        var token = $('meta[name="csrf-token"]').attr('content'); 
+        var animationend = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        var pageloading = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><i class="fa fa-circle-o-notch fa-spin green"></i><i class="fa fa-circle-o-notch fa-spin red"></i><i class="fa fa-circle-o-notch fa-spin blue"></i></div></div>';
+        var reloadbutton = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><button class="btn btn-lg btn-danger" onclick="window.location=window.location;">Reload Page</button></div></div>';
+
+        function ajaxerror (){
+            new PNotify({
+                title: 'Error',
+                text: 'We were unable to retrieve data from our servers. Refresh the page to try again.',
+                type : 'error',
+            });
+        }
+
+        function ajaxerrorclicktoclose (){
+            var notice = new PNotify({
+                title: 'Error',
+                text: 'We were unable to retrieve data from our servers. Click here to try again.',
+                type : 'error',
+                buttons: {
+                    closer: false,
+                    sticker: false
+                }
+            });
+
+            notice.get().click(function() {
+                notice.remove();
+                window.location = window.location;
+            });
+        }
+
+        function addto(nid,element){
+          var listVal = $(element).val();
+          if(listVal === ''){
+            listVal = nid;
+            $(element).val(listVal);
+          }else{
+            var listArr = listVal.split(";;;;");
+            if($.inArray(nid,listArr) === -1){
+              listArr.push(nid);
+              listVal = listArr.join(";;;;");
+              $(element).val(listVal);
+            }
+          }
+
+        }
+
+        function removefrom(nid,element){
+          var listVal = $(element).val();
+          if(listVal !== ''){
+            var listArr = listVal.split(";;;;");
+            if($.inArray(nid,listArr) !== -1){
+              var index = $.inArray(nid,listArr);
+              listArr.splice(index,1);
+              listVal = listArr.join(";;;;");
+              $(element).val(listVal);
+            }
+          }
+        }
+
+        function redrawfilterbutton(){
+          var locations = $('.location-list:checked').map(function (){
+            return this.id;
+          }).get().length;
+
+          var industries = $('.industry-list:checked').map(function (){
+            return this.id;
+          }).get().length;
+
+          var functionalareas = $('.functional-area-list:checked').map(function (){
+            return this.id;
+          }).get().length;
+
+          if(locations >= 0 || industries >= 0 || functionalareas >= 0){
+            if($('#activatefilternow').html() === ''){
+                $('#activatefilternow').html(
+                    '<button id="activatefilternowbutton" title="Apply filters" class="btn btn-sm">Apply Filters</button>'
+                );
+                $('#activatefilternowbutton').click(function (e){
+                    $('form#search_resumes_form').submit();
+                });
+            }
+
+          }else{
+            $('#activatefilternow').html('');
+          }
+          
+        }
+
+    function reintializefilters (){
+      var locations = $('#location_list').val();
+      var industries = $('#industry_list').val();
+      var functionalArea = $('#functional_area_list').val();
+
+      var locationArr = locations.split(';;;;');
+      var industryArr = industries.split(';;;;');
+      var functionalAreaArr = functionalArea.split(';;;;');
+
+      $.each(locationArr, function (i,val){
+
+        $('[id="'+val+'_location"]').prop('checked',true);
+      });
+
+      $.each(industryArr, function (i,val){
+
+        $('[id="'+val+'_industry"]').prop('checked',true);
+      });
+
+      $.each(functionalAreaArr, function (i,val){
+
+        $('[id="'+val+'_functional_area"]').prop('checked',true);
+      });
+
+    }
+
+
+    $('#sortbyselection').click(function (e){
+      var form = $('form#search_resumes_form');
+      var order = $(this).val();
+      var input = $("<input>")
+           .attr("type", "hidden")
+           .attr("name", "order").val(order);
+      form.append(input);
+      form.submit();
+    });
+
+    $(document).ready(function(){
+
+        // Question handler               
+        $('.filter-block li').on(action ,function(){
+            // Get next element
+            $(this).next()
+                .slideToggle(speed)
+                    // Select all other answers
+                    .siblings('.filter-div')
+                        .slideUp();
+            $('.filter-block li.active').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $.post($('#searchresumesdata').val(),{_token:token},function (data){
+          if(data === -1){
+            ajaxerrorclicktoclose();
+          }else{
+            $('#location-box').html(data.locations);
+
+            $('.location-list').change(function (event){
+              if($(this).is(":checked")){
+                addto($(this).attr('data-id'),'#location_list');
+              }else{
+                removefrom($(this).attr('data-id'),'#location_list');
+              }
+              redrawfilterbutton();
+            });
+
+            $('#industry-box').html(data.industry);
+
+            $('.industry-list').change(function (event){
+              if($(this).is(":checked")){
+                addto($(this).attr('data-id'),'#industry_list');
+              }else{
+                removefrom($(this).attr('data-id'),'#industry_list');
+              }
+              redrawfilterbutton();
+            });
+
+            $('#functional-area-box').html(data.functionalarea);
+
+            $('.functional-area-list').change(function (event){
+              if($(this).is(":checked")){
+                addto($(this).attr('data-id'),'#functional_area_list');
+              }else{
+                removefrom($(this).attr('data-id'),'#functional_area_list');
+              }
+              redrawfilterbutton();
+            });
+            reintializefilters();
+          }
+        });
+    }); 
+
+        
+	</script>
+@stop

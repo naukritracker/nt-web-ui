@@ -1,0 +1,2 @@
+<div class="mar-t30">{!! Html::image('assets/img/ad1.png','Ad1',array('class'=>'img-responsive')) !!}</div>
+<div class="mar-t30">{!! Html::image('assets/img/ad2.png','Ad2',array('class'=>'img-responsive')) !!}</div>                
