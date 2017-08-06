@@ -1,4 +1,4 @@
-## Naukri Tracker 
+## Naukri Tracker Job Portal
 
 Job portal build atop the Laravel Framework v5.1.
 
