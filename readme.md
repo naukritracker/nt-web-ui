@@ -3,8 +3,6 @@
 Job portal build atop the Laravel Framework v5.1.
 
 
-
-
 ## Setup project any environment(tested on Linux(Ubuntu 14.04/15.04/16.04) flavors)
 
 
