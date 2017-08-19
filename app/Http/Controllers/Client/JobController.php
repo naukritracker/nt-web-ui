@@ -24,6 +24,11 @@ class JobController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
+
+
+
+
     public function showSearchJobs(Request $request, $country = null, $state = null)
     {
         $jobposting = new JobPosting;
@@ -61,6 +66,9 @@ class JobController extends Controller
                 ->with('availablejobs', $availablejobs)
                 ->with('order', $order);
         }
+
+
+
     }
 
     /**
@@ -107,6 +115,7 @@ class JobController extends Controller
         if ($order == '') {
             $order = 'updated_at';
         }
+
 
         $search_value = $request->input('search_value');
         $locations = $request->input('location_list');

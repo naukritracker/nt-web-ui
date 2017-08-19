@@ -75,7 +75,7 @@
               </div>       
         </ul>
 
-        <input type="reset" id="k" value="Reset Filters" onclick=clicker();>
+        <btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>
 
     </div>
       <div>
@@ -218,7 +218,8 @@
   // Accordian
   function clicker()
   {
-      window.location="http://localhost:8000/search/jobs"
+      window.location="/search/jobs"
+      $('#slider').slider("value",0)
   }
         var action="click";
         var speed="500";
@@ -398,7 +399,9 @@
         }
 
 
-        $('#sortbyselection').on('change',function() {
+  $('#slider').slider("value",0)
+
+  $('#sortbyselection').on('change',function() {
           var form = $('form#search_jobs_form');
           var order = $(this).val();
           var input = $("<input>")

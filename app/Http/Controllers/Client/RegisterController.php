@@ -84,7 +84,7 @@ class RegisterController extends Controller
         } else {
             $html .= '<option value="" selected>Select employer</option>';
         }
-        
+
         foreach ($companies as $c) {
             if ($selectcompany == $c->id) {
                 $html .= '<option value="'.$c->id.'" selected>'.$c->name.'</option>';
@@ -111,12 +111,12 @@ class RegisterController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8|confirmed',
                 'password_confirmation' => 'required',
-                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'company' => 'required',
-                'agreetoconditions' => 'required',
-                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
+//                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
+//                'first_name' => 'required',
+//                'last_name' => 'required',
+//                'company' => 'required',
+//                'agreetoconditions' => 'required',
+//                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
             ];
 
             $validation = Validator::make($request->all(), $validationRules);
@@ -132,21 +132,21 @@ class RegisterController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8|confirmed',
                 'password_confirmation' => 'required',
-                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'company' => 'required',
-                'agreetoconditions' => 'required',
-                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
+               // 'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
+               // 'first_name' => 'required',
+               // 'last_name' => 'required',
+               // 'company' => 'required',
+               // 'agreetoconditions' => 'required',
+             //  'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
                 ]);
         }
 
-        $newuser = new User;
+       $newuser = new User;
         $newuser->email = $request->get('email');
         $newuser->password = Hash::make($request->get('password'));
-        $newuser->name = $request->get('first_name').' '.$request->get('last_name');
+        $newuser->name = $request->get('first_name');
         $newuser->login_type = 'registered';
-        
+
         $digits = 8;
         $confirmation_code = rand(pow(10, $digits-1), pow(10, $digits)-1);
 
@@ -172,7 +172,7 @@ class RegisterController extends Controller
             $userdetails->sse_institution = $request->get('educational_institute_name');
             $userdetails->sse_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
             $userdetails->sse_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-            
+
             $userdetails->hsse_institution = '';
             $userdetails->ug_institution = '';
             $userdetails->pg_institution = '';
@@ -327,7 +327,7 @@ class RegisterController extends Controller
             $userexperience->save();
         }
 
-        
+
 
         $candidate = Role::where('name', 'candidate')->first();
         $newuser->attachRole($candidate);
@@ -393,7 +393,7 @@ class RegisterController extends Controller
                 $company->contactno = $request->get('contactNo');
                 $company->website = $request->get('website');
                 $company->address = $request->get('address');
-                
+
                 if ($company->save()) {
                     $data['success'] = 1;
                     $data['company_id'] = $company->id;

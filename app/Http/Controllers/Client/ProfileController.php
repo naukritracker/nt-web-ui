@@ -75,6 +75,7 @@ class ProfileController extends Controller
                 ->with('countries', $selectcountries)
                 ->with('selectindustry', $selectindustry)
                 ->with('selectfunctionalarea', $selectfunctionalarea);
+
         } else {
             $view = view('client.profile')->with('selectcompanies', $selectcompanies)
                 ->with('annual_lakh_options', $annual_lakh_options)
@@ -82,6 +83,7 @@ class ProfileController extends Controller
                 ->with('countries', $selectcountries)
                 ->with('selectindustry', $selectindustry)
                 ->with('selectfunctionalarea', $selectfunctionalarea);
+
         }
 
         return $view;
@@ -520,6 +522,8 @@ class ProfileController extends Controller
 
     public function saveProfile(Request $request)
     {
+
+
         $this->validate(
             $request,
             [
@@ -570,6 +574,7 @@ class ProfileController extends Controller
             $user->push();
 
             return redirect()->route('Profile', ['#page=profileform']);
+
         } catch (\Exception $e) {
             //echo $e->getMessage(); exit;
             return back()->withErrors([$e]);
@@ -862,6 +867,7 @@ class ProfileController extends Controller
     public function loadEducationDetails(Request $request, FormBuilder $formbuilder)
     {
         if ($request->ajax()) {
+			$userdetail = self::_escapeUserDetail(Auth::user()->userdetail);
             $form = $formbuilder->build('SaveEducationDetails');
             return $form;
         } else {
@@ -869,9 +875,8 @@ class ProfileController extends Controller
         }
     }
 
-    public function saveEducationDetails(Request $request)
-    {
-        $userdetails = UserDetail::where('user_id', Auth::user()->id)->first();
+   public function saveEducationDetails(Request $request){
+        $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
 
         $userdetails->sse_institution = $request->get('10_educational_institute_name');
         $userdetails->sse_start_date = $request->get('10_education_start_date');
@@ -880,32 +885,32 @@ class ProfileController extends Controller
         // $userdetails->sse_marks = $request->get('10_marks');
 
         $userdetails->hsse_institution = $request->get('12_educational_institute_name');
-        $userdetails->hsse_start_date = ( $request->get('12_education_start_date') != '' ? $request->get('12_education_start_date') : NULL);
-        $userdetails->hsse_end_date = ( $request->get('12_education_end_date') != '' ? $request->get('12_education_end_date') : NULL);
+        $userdetails->hsse_start_date = $request->get('12_education_start_date');
+        $userdetails->hsse_end_date = $request->get('12_education_end_date');
         $userdetails->hsse_type = $request->get('12_course');
         // $userdetails->hsse_marks = $request->get('12_marks');
 
         $userdetails->ug_institution = $request->get('ug_educational_institute_name');
-        $userdetails->ug_start_date = ( $request->get('ug_education_start_date') != '' ? $request->get('ug_education_start_date') : NULL);
-        $userdetails->ug_end_date = ( $request->get('ug_education_end_date') != '' ? $request->get('ug_education_end_date') : NULL);
+        $userdetails->ug_start_date = $request->get('ug_education_start_date');
+        $userdetails->ug_end_date = $request->get('ug_education_end_date');
         $userdetails->ug_type = $request->get('ug_course');
         // $userdetails->ug_marks = $request->get('ug_marks');
 
         $userdetails->pg_institution = $request->get('pg_educational_institute_name');
-        $userdetails->pg_start_date = ( $request->get('pg_education_start_date') != '' ? $request->get('pg_education_start_date') : NULL);
-        $userdetails->pg_end_date = ( $request->get('pg_education_end_date') != '' ? $request->get('pg_education_end_date') : NULL);
+        $userdetails->pg_start_date = $request->get('pg_education_start_date');
+        $userdetails->pg_end_date = $request->get('pg_education_end_date');
         $userdetails->pg_type = $request->get('pg_course');
         // $userdetails->pg_marks = $request->get('pg_marks');
 
         $userdetails->other_institution = $request->get('other_educational_institute_name');
-        $userdetails->other_start_date = ( $request->get('other_education_start_date') != '' ? $request->get('other_education_start_date') : NULL);
-        $userdetails->other_end_date = ( $request->get('other_education_end_date') != '' ? $request->get('other_education_end_date') : NULL);
+        $userdetails->other_start_date = $request->get('other_education_start_date');
+        $userdetails->other_end_date = $request->get('other_education_end_date');
         $userdetails->other_type = $request->get('other_course');
         // $userdetails->other_marks = $request->get('other_marks');
 
         $userdetails->save();
 
-        return redirect()->route('Profile', ['#page=educationdetails']);
+        return redirect()->route('Profile',['#page=educationdetails']);
     }
 
     public function loadChangePassword(Request $request, FormBuilder $formbuilder)

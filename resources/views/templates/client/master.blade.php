@@ -27,6 +27,7 @@
         {!! Html::style('assets/css/animate.css') !!}
         {!! Html::style('assets/css/pnotify.custom-3.min.css') !!}
         {!! Html::style('assets/css/main.css') !!}
+        {!! Html::style('assets/css/jquery-multi-step-form.css') !!}
     @show
 
     @section('html5shiv')
@@ -36,6 +37,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     @show
+
 
     @section('google-sign-in')
         <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -69,19 +71,20 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a href="{{URL::route('Home')}}" class="navbar-brand logo logo-top mar-t20 mar-b20">Naukri Tracker</a>
+
                 </div>
                 <nav class="collapse navbar-collapse bs-navbar-collapse">
+
                     <ul class="nav navbar-nav navbar-right mar-sm-t25">
 
                         <li id= "togg">
-
-
-                            Search Jobs by Country: <select onchange="window.location.href=this.value;">
-                                <option selected disabled>Choose Country</option>
-                                <option value="/search/jobs/united-arab-emirates"> UAE</option>
+                            Search Jobs by Country:
+                            <select   id="dropdown" onchange="location=this.value;">
+                                <option value="">Choose Country</option>
+                                <option value="/search/jobs/united-arab-emirates">UAE</option>
                                 <option value="/search/jobs/saudi-arabia" >Saudi Arabia</option>
                                 <option value="/search/jobs/oman" >Oman</option>
-                                <option value="/search/jobs/quatar" >Quatar</option>
+                                <option value="/search/jobs/quatar" >Qatar</option>
                                 <option value="/search/jobs/kuwait" >Kuwait</option>
                                 <option value="/search/jobs/bahrain" >Bahrain</option>
                                 <option value="/search/jobs/all-gulf-countries" >All Gulf Countries</option>
@@ -195,7 +198,10 @@
                                     Log in
                                 </a>
                             </li>
-                            <li><a href="{{ URL::route('Register') }}" class="signup-btn">Register</a></li>
+                            <li><a href="{{ URL::route('Register') }}" class="signup-btn">Register</a>
+                                <!--<a href="#" class="signup-btn" data-toggle="modal" data-target="#register-popup">
+                                    reg
+                                </a></li> -->
                         @endif
 
 
@@ -211,6 +217,7 @@
 
 
 @include('client.partials.loginmodal')
+
 
 @section('footer')
     <!-- Footer Starts Here -->
@@ -288,19 +295,55 @@
 <!-- Footer Ends Here -->
 
 @section('js')
+
+
+
+
+
+
     {!! Html::script('assets/js/jquery-1.11.1.min.js') !!}
     {!! Html::script('assets/js/bootstrap.min.js') !!}
     {!! Html::script('assets/js/pnotify.custom-3.min.js') !!}
+
+    <script type="text/javascript">
+
+        var selectedItem = sessionStorage.getItem("SelectedItem");
+        $('#dropdown').val(selectedItem);
+
+        $('#dropdown').change(function() {
+            var dropVal = $(this).val();
+            sessionStorage.setItem("SelectedItem", dropVal);
+        });
+
+    </script>
     <script type="text/javascript">//PNotify.prototype.options.styling = "fontawesome";</script>
     <script type="text/javascript">
         token = $('meta[name="csrf-token"]').attr('content');
         animationend = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         pageloading = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><i class="fa fa-circle-o-notch fa-spin green"></i><i class="fa fa-circle-o-notch fa-spin red"></i><i class="fa fa-circle-o-notch fa-spin blue"></i></div></div>';
         reloadbutton = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><button class="btn btn-lg btn-danger" onclick="window.location=window.location;">Reload Page</button></div></div>';
+
+    </script>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        $('#searchForm #select1').change(function() {
+            if ($(this).data('options') === undefined) {
+                /*Taking an array of all options-2 and kind of embedding it on the select1*/
+                $(this).data('options', $('#searchForm #select2 option').clone());
+            }
+            var id = $(this).val();
+            var options = $(this).data('options').filter('[value=' + id + ']');
+            $('#searchForm #select2').html(options);
+        });
     </script>
     @if (!Auth::user())
         {!! Html::script('assets/js/jquery.validate.min.js') !!}
+
         <script type="text/javascript">
+
             function ajaxerrorclicktoclose (){
                 var notice = new PNotify({
                     title: 'Error',
@@ -317,6 +360,10 @@
                     window.location = window.location;
                 });
             }
+
+
+
+
 
 
             $('#login_form input[name="type"]').on("click", function (e) {
@@ -392,6 +439,9 @@
                         email:"<span class='glyphicon glyphicon-ban-circle'></span>  A valid email is required"
                     },
                 }
+            });
+            $('#password').bind("cut copy paste",function(e) {
+                e.preventDefault();
             });
 
             $('#login_form').submit(function (e) {
@@ -521,6 +571,11 @@
         @endforeach
     @endif
 @endif
+
+
+
+
+
 <!--Handle Info Ends-->
 </body>
 
