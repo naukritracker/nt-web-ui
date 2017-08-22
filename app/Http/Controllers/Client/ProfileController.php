@@ -33,6 +33,8 @@ class ProfileController extends Controller
      */
     public function showProfile(Request $request)
     {
+
+
         $companies = Company::all();
         $selectcompanies = array();
         foreach ($companies as $c) {
@@ -326,7 +328,9 @@ class ProfileController extends Controller
      */
     public function loadResumeEditor(Request $request, FormBuilder $formbuilder)
     {
+
         if ($request->ajax()) {
+
             $form = $formbuilder->build('SaveProfile');
             return $form;
         } else {
@@ -546,11 +550,7 @@ class ProfileController extends Controller
             $user->userdetail->contact_no = $request->get('contact_no');
             $user->userdetail->country_code = $request->get('country_code');
             $user->userdetail->current_location = $request->get('current_location');
-            $user->userdetail->preferred_location = $request->get('preferred_location');
-            $industry = ( $request->get('industry') != '' ? $request->get('industry') : NULL );
-            $user->userdetail->industry = $industry;
-            $user->userdetail->functional_area = ( $request->get('functional_area') != '' ? $request->get('functional_area') : NULL );
-            $user->userdetail->role = $request->get('role');
+
             $user->userdetail->dob_day = $request->get('dob_day');
             $user->userdetail->dob_month = $request->get('dob_month');
             $user->userdetail->dob_year = $request->get('dob_year');
@@ -571,9 +571,10 @@ class ProfileController extends Controller
                 }
                 $user->userdetail->profile_image = $imageName;
             }
-            $user->push();
 
             return redirect()->route('Profile', ['#page=profileform']);
+
+            $user->push();
 
         } catch (\Exception $e) {
             //echo $e->getMessage(); exit;
@@ -767,6 +768,9 @@ class ProfileController extends Controller
                   <p>There are many fields in life where you might be uniquely talented. Let us know so we can find you the dream job you have been looking for.</p>
                   <p> <button class="btn btn-sm btn-success" id="add-exp" data-toggle="modal" data-target="#my-popup">Tell us more about yourself &nbsp;<i class="fa fa-paint-brush"></i></button></p>
                 </div>';
+
+
+
             }
 
 
@@ -842,6 +846,8 @@ class ProfileController extends Controller
 
             return -1;
         }
+
+
     }
 
 
