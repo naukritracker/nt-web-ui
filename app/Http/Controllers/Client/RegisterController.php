@@ -84,7 +84,7 @@ class RegisterController extends Controller
         } else {
             $html .= '<option value="" selected>Select employer</option>';
         }
-        
+
         foreach ($companies as $c) {
             if ($selectcompany == $c->id) {
                 $html .= '<option value="'.$c->id.'" selected>'.$c->name.'</option>';
@@ -111,12 +111,12 @@ class RegisterController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8|confirmed',
                 'password_confirmation' => 'required',
-                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'company' => 'required',
-                'agreetoconditions' => 'required',
-                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
+//                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
+//                'first_name' => 'required',
+//                'last_name' => 'required',
+//                'company' => 'required',
+//                'agreetoconditions' => 'required',
+//                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
             ];
 
             $validation = Validator::make($request->all(), $validationRules);
@@ -132,207 +132,50 @@ class RegisterController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|min:8|confirmed',
                 'password_confirmation' => 'required',
-                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'company' => 'required',
-                'agreetoconditions' => 'required',
-                'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
+               // 'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
+               // 'first_name' => 'required',
+               // 'last_name' => 'required',
+               // 'company' => 'required',
+               // 'agreetoconditions' => 'required',
+             //  'resume' => 'mimes:pdf,doc,docx,rtf|max:300'
                 ]);
         }
 
-        $newuser = new User;
+       $newuser = new User;
         $newuser->email = $request->get('email');
         $newuser->password = Hash::make($request->get('password'));
-        $newuser->name = $request->get('first_name').' '.$request->get('last_name');
+        $newuser->name = $request->get('first_name');
         $newuser->login_type = 'registered';
-        
+
         $digits = 8;
         $confirmation_code = rand(pow(10, $digits-1), pow(10, $digits)-1);
 
-        $newuser->active_flag = $confirmation_code;
+        $newuser->active_flag = 1;
         $newuser->save();
+
 
         $userdetails = new UserDetail;
         $userdetails->user_id = $newuser->id;
-        $userdetails->state_id = $request->get('state');
         $userdetails->first_name = $request->get('first_name');
-        $userdetails->last_name = $request->get('last_name');
-        $userdetails->contact_no = $request->get('contact_no');
-        $userdetails->profile_headline = '';
-        $userdetails->current_location = 0;
-        $userdetails->preferred_location = 0;
-        $userdetails->dob_day = 0;
-        $userdetails->dob_month = 0;
-        $userdetails->dob_year = 0;
-        $userdetails->country_code = $request->get('country_code');
-        $userdetails->city = $request->get('city');
-
-        if ($request->get('education_type') == 10) {
-            $userdetails->sse_institution = $request->get('educational_institute_name');
-            $userdetails->sse_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
-            $userdetails->sse_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-            
-            $userdetails->hsse_institution = '';
-            $userdetails->ug_institution = '';
-            $userdetails->pg_institution = '';
-            $userdetails->other_institution = '';
-            $userdetails->hsse_start_date = '0000-00-00 00:00:00';
-            $userdetails->ug_start_date = '0000-00-00 00:00:00';
-            $userdetails->pg_start_date = '0000-00-00 00:00:00';
-            $userdetails->other_start_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_end_date = '0000-00-00 00:00:00';
-            $userdetails->ug_end_date = '0000-00-00 00:00:00';
-            $userdetails->pg_end_date = '0000-00-00 00:00:00';
-            $userdetails->other_end_date = '0000-00-00 00:00:00';
-            $userdetails->sse_marks = 0;
-            $userdetails->hsse_marks = 0;
-            $userdetails->ug_marks = 0;
-            $userdetails->pg_marks = 0;
-            $userdetails->other_marks = 0;
-        } elseif ($request->get('education_type') == 12) {
-            $userdetails->hsse_institution = $request->get('educational_institute_name');
-            $userdetails->hsse_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
-            $userdetails->hsse_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-
-
-            $userdetails->sse_institution = '';
-            $userdetails->ug_institution = '';
-            $userdetails->pg_institution = '';
-            $userdetails->other_institution = '';
-            $userdetails->sse_start_date = '0000-00-00 00:00:00';
-            $userdetails->ug_start_date = '0000-00-00 00:00:00';
-            $userdetails->pg_start_date = '0000-00-00 00:00:00';
-            $userdetails->other_start_date = '0000-00-00 00:00:00';
-            $userdetails->sse_end_date = '0000-00-00 00:00:00';
-            $userdetails->ug_end_date = '0000-00-00 00:00:00';
-            $userdetails->pg_end_date = '0000-00-00 00:00:00';
-            $userdetails->other_end_date = '0000-00-00 00:00:00';
-            $userdetails->sse_marks = 0;
-            $userdetails->hsse_marks = 0;
-            $userdetails->ug_marks = 0;
-            $userdetails->pg_marks = 0;
-            $userdetails->other_marks = 0;
-        } elseif ($request->get('education_type') == 0) {
-            $userdetails->ug_institution = $request->get('educational_institute_name');
-            $userdetails->ug_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
-            $userdetails->ug_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-
-
-            $userdetails->hsse_institution = '';
-            $userdetails->sse_institution = '';
-            $userdetails->pg_institution = '';
-            $userdetails->other_institution = '';
-            $userdetails->hsse_start_date = '0000-00-00 00:00:00';
-            $userdetails->sse_start_date = '0000-00-00 00:00:00';
-            $userdetails->pg_start_date = '0000-00-00 00:00:00';
-            $userdetails->other_start_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_end_date = '0000-00-00 00:00:00';
-            $userdetails->sse_end_date = '0000-00-00 00:00:00';
-            $userdetails->pg_end_date = '0000-00-00 00:00:00';
-            $userdetails->other_end_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_marks = 0;
-            $userdetails->sse_marks = 0;
-            $userdetails->ug_marks = 0;
-            $userdetails->pg_marks = 0;
-            $userdetails->other_marks = 0;
-        } elseif ($request->get('education_type') == 1) {
-            $userdetails->pg_institution = $request->get('educational_institute_name');
-            $userdetails->pg_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
-            $userdetails->pg_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-
-
-            $userdetails->hsse_institution = '';
-            $userdetails->ug_institution = '';
-            $userdetails->sse_institution = '';
-            $userdetails->other_institution = '';
-            $userdetails->hsse_start_date = '0000-00-00 00:00:00';
-            $userdetails->ug_start_date = '0000-00-00 00:00:00';
-            $userdetails->sse_start_date = '0000-00-00 00:00:00';
-            $userdetails->other_start_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_end_date = '0000-00-00 00:00:00';
-            $userdetails->ug_end_date = '0000-00-00 00:00:00';
-            $userdetails->sse_end_date = '0000-00-00 00:00:00';
-            $userdetails->other_end_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_marks = 0;
-            $userdetails->ug_marks = 0;
-            $userdetails->pg_marks = 0;
-            $userdetails->sse_marks = 0;
-            $userdetails->other_marks = 0;
-        } elseif ($request->get('education_type') == 2) {
-            $userdetails->hsse_institution = $request->get('educational_institute_name');
-            $userdetails->other_start_date = date("Y-m-d H:i:s", strtotime($request->get('education_start_date')));
-            $userdetails->other_end_date = date("Y-m-d H:i:s", strtotime($request->get('education_end_date')));
-
-
-            $userdetails->hsse_institution = '';
-            $userdetails->ug_institution = '';
-            $userdetails->pg_institution = '';
-            $userdetails->sse_institution = '';
-            $userdetails->hsse_start_date = '0000-00-00 00:00:00';
-            $userdetails->ug_start_date = '0000-00-00 00:00:00';
-            $userdetails->pg_start_date = '0000-00-00 00:00:00';
-            $userdetails->sse_start_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_end_date = '0000-00-00 00:00:00';
-            $userdetails->ug_end_date = '0000-00-00 00:00:00';
-            $userdetails->pg_end_date = '0000-00-00 00:00:00';
-            $userdetails->sse_end_date = '0000-00-00 00:00:00';
-            $userdetails->hsse_marks = 0;
-            $userdetails->ug_marks = 0;
-            $userdetails->pg_marks = 0;
-            $userdetails->sse_marks = 0;
-            $userdetails->other_marks = 0;
-        }
-
-
-        if ($request->hasFile('resume')) {
-            $media = new Media;
-            $medianame = strtolower($request->get('first_name').''.$request->get('last_name'))
-                        .'_'
-                        .$newuser->id.'_resume.'
-                        .$request->file('resume')->getClientOriginalExtension();
-            try {
-                $request->file('resume')->move(public_path().'/uploads/resume', $medianame);
-                $media->content = $medianame;
-                $pdf = new \App\Http\Controllers\Utility\PdfController(public_path().'/uploads/resume/'.$medianame);
-                $media->raw = $pdf->decode();
-                if ($media->save()) {
-                    $userdetails->resume_media_id = $media->id;
-                } else {
-                    $userdetails->resume_media_id = 0;
-                }
-            } catch (\Exception $e) {
-                return back()->withErrors([$e]);
-            }
-        } else {
-            $userdetails->resume_media_id = 0;
-        }
-
+        //$userdetails->last_name = 'shenoy';
+        $userdetails->graduation = 'abc';
+       // $userdetails->ug_specialization = 'abc';
+       //$userdetails->ug_institute ='abc';
+        $userdetails->ug_year = 4444;
 
         $userdetails->save();
 
-        if ($request->get('company') != 0) {
-            $d1 = 0;
-            $d2 = 0;
-            $userexperience = new Experience;
-            $userexperience->company_id = $request->get('company');
-            $userexperience->state_id = $request->get('state');
-            $userexperience->user_id = $newuser->id;
-            if ($request->has('experience_start_date')) {
-                $userexperience->start_date = date("Y-m-d H:i:s", strtotime($request->get('experience_start_date')));
-            }
-            if ($request->has('experience_end_date')) {
-                $userexperience->end_date = date("Y-m-d H:i:s", strtotime($request->get('experience_end_date')));
-            }
-            $userexperience->save();
-        }
 
-        
+
+
+
+
+
+
 
         $candidate = Role::where('name', 'candidate')->first();
         $newuser->attachRole($candidate);
         $newuser->save();
-
 //        Mail::send(
 //            'emails.confirmregistration',
 //            ['link' => route('ConfirmRegistration', ['email'=>$newuser->email,'code'=>$confirmation_code])],
@@ -393,7 +236,7 @@ class RegisterController extends Controller
                 $company->contactno = $request->get('contactNo');
                 $company->website = $request->get('website');
                 $company->address = $request->get('address');
-                
+
                 if ($company->save()) {
                     $data['success'] = 1;
                     $data['company_id'] = $company->id;

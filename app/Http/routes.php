@@ -307,6 +307,8 @@ Route::get('parsecsv/{name?}', function ($filename = null) {
 Route::group(['middleware'=>'auth.notloggedin'], function () {
     //GET Show login page
     Route::get('show/login', ['as'=>'ShowLogin', 'uses'=>'Client\LoginController@showLogin']);
+    Route::get('show/login', ['as'=>'ShowLogin', 'uses'=>'Client\LoginController@showLogin']);
+
 
     //GET Show login page with error - **WARNING:NOT BEING USED**
     Route::get('show/login/error', ['as'=>'ShowLoginWithError', 'uses'=>'Client\LoginController@showLoginWithError']);

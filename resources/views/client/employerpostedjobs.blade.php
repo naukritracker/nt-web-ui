@@ -5,13 +5,7 @@
         <div class="container">
             <div class="row hmar10">
                 <div class="col-sm-2 pad-t20 hpad10">
-                    <a href="javascript:void(0)" id="employer-photo">
-                    @if (isset(Auth::user("employer")->details->profile_image) and Auth::user("employer")->details->profile_image != '')
-                        {!! Html::image('uploads/profile/'.Auth::user("employer")->details->profile_image, Auth::user("employer")->name, ['class'=>'img-responsive','id'=>'profile_image']) !!}
-                    @else
-                        {!! Html::image('assets/img/userpic_large.png', null, ['class'=>'img-responsive','id'=>'profile_image']) !!}
-                    @endif
-                    </a>
+
                     {!! Form::open(array('route' => 'SaveEmployerPhoto', 'id' => 'employer-photo-form','enctype' => 'multipart/form-data')) !!}
                     <div style="visibility:hidden">
                         {!! Form::file('employerPhoto', array('id' => 'employer-photo-input')) !!}
