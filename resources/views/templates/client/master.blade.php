@@ -27,7 +27,7 @@
         {!! Html::style('assets/css/animate.css') !!}
         {!! Html::style('assets/css/pnotify.custom-3.min.css') !!}
         {!! Html::style('assets/css/main.css') !!}
-        {!! Html::style('assets/css/jquery-multi-step-form.css') !!}
+
     @show
 
     @section('html5shiv')
@@ -219,6 +219,11 @@
 @include('client.partials.loginmodal')
 
 
+
+
+
+
+
 @section('footer')
     <!-- Footer Starts Here -->
     <footer>
@@ -329,14 +334,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-        $('#searchForm #select1').change(function() {
-            if ($(this).data('options') === undefined) {
-                /*Taking an array of all options-2 and kind of embedding it on the select1*/
-                $(this).data('options', $('#searchForm #select2 option').clone());
-            }
-            var id = $(this).val();
-            var options = $(this).data('options').filter('[value=' + id + ']');
-            $('#searchForm #select2').html(options);
+        $(document).ready(function () {
+            $('#searchForm #select1').change(function () {
+                if ($(this).data('options') === undefined) {
+                    /*Taking an array of all options-2 and kind of embedding it on the select1*/
+                    $(this).data('options', $('#searchForm #select2 option').clone());
+                }
+                var id = $(this).val();
+                var options = $(this).data('options').filter('[value=' + id + ']');
+                $('#searchForm #select2').html(options);
+            });
         });
     </script>
     @if (!Auth::user())

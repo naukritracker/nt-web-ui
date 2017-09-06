@@ -1,4 +1,4 @@
-{!! Form::open( ["class"=>"row pad-t10 pad-b10", "id"=> "education_form", "route"=>"SaveEducationDetails"]) !!}
+{!! Form::open( ["class"=>"row pad-t10 pad-b10", "id"=> "education_form", "route"=>"SaveEducationDetails" ]) !!}
 
 
 <div>
@@ -26,10 +26,15 @@
             <div class="col-xs-12">
                 <div class="row pad-t10">
                     <div class="form-group">
-                        <label for="">Basic/graduation</label>
-                        <select class='form-control' name="graduation" id="graduation">
+                        <label for="">Basic/graduation<span class="error-text">*</span></label>
 
-                            <option value="0" selected>Select</option>
+
+                        {!!Form::select('graduation',['Not Pursuing Graduation','B.A','B.Arch','B.Des','B.El.Ed','B.P.Ed','B.U.M.S','BAMS','B.B.A/ B.M.S','B.Com','B.Ed','BDS','BFA','BHM','B.Pharma','B.Sc','B.Tech/B.E.','BHMS','LLB','MBBS','Diploma','BVSC','Other'],Auth::user()->userdetail->graduation,['placeholder'=>'Select','class'=>'form-control'])!!}
+
+                    <!-- <select class='form-control' name="graduation" >
+
+
+                            <option value="0">Select</option>
                             <option value="1">Not Pursuing Graduation</option>
                             <option value="2">B.A</option>
                             <option value="3">B.Arch</option>
@@ -38,7 +43,7 @@
                             <option value="5">B.P.Ed</option>
                             <option value="7">B.U.M.S</option>
                             <option value="8">BAMS</option>
-                            <option value="9">BCA</option>
+                            <option value="9">c</option>
                             <option value="10">B.B.A/ B.M.S</option>
                             <option value="11">B.Com</option>
                             <option value="12">B.Ed</option>
@@ -54,7 +59,7 @@
                             <option value="22">Diploma</option>
                             <option value="23">BVSC</option>
                             <option value="9999">Other</option>
-                        </select>
+                        </select>! -->
                     </div>
                 </div>
             </div>
@@ -62,8 +67,8 @@
             <div class="col-xs-12">
                 <div class="row pad-t10">
                     <div class="form-group">
-                        <label for="name">Specialization </label>
-                        {!!Form::text('name',null,['placeholder'=>'Your Specialization','class'=>'form-control','id'=>'register_company_name'])!!}
+                        <label for="name">Specialization <span class="error-text">*</span></label>
+                        {!!Form::text('ug_specialization',Auth::user()->userdetail->ug_specialization,['placeholder'=>'Your Specialization','class'=>'form-control','required'])!!}
                     </div>
                 </div>
             </div>
@@ -71,8 +76,8 @@
             <div class="col-xs-12">
                 <div class="row pad-t10">
                     <div class="form-group">
-                        <label for="name">Institution for Under Graduation</label>
-                        {!!Form::text('name',null,['placeholder'=>'Specify University/Institute','class'=>'form-control','id'=>'register_company_name'])!!}
+                        <label for="name">Institution for Under Graduation<span class="error-text">*</span></label>
+                        {!!Form::text('ug_institution',Auth::user()->userdetail->ug_institute,['placeholder'=>'Specify University/Institute','class'=>'form-control','required'])!!}
                     </div>
                 </div>
             </div>
@@ -80,8 +85,8 @@
             <div class="col-xs-12">
                 <div class="row pad-t10">
                     <div class="form-group">
-                        <label for="name">Year</label>
-                        {!!  Form::selectRange('number', 2021,1940, 66, ['class' => 'form-control', 'placeholder'=>'Passing year']) !!}
+                        <label for="name">Year<span class="error-text">*</span></label>
+                        {!!  Form::selectRange('ug_year', 2021,1940,Auth::user()->userdetail->ug_year, ['class' => 'form-control', 'placeholder'=>'Passing year','required']) !!}
                     </div>
                 </div>
             </div>
@@ -93,7 +98,11 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="">Post Graduation</label>
-                        <select class='form-control' name="graduation" id="pgraduation">
+
+
+                        {!!Form::select('postgraduation',['CA','CS','DM','ICWA (CMA)','Integrated PG','LLM','M.A','M.Arch','M.Ch','M.Com','M.Des.','M.Ed','M.Pharma','MDS','MFA','MS/M.Sc(Science)','M.Tech','MBA/PGDM','MCA','Medical-MS/MD','PG Diploma','MVSC','MCM','Other'],Auth::user()->userdetail->post_graduation,['placeholder'=>'Select','class'=>'form-control'])!!}
+
+                        <!--<select class='form-control' name="postgraduation" >
 
                             <option value="0" selected>Select</option>
                             <option value="1">CA</option>
@@ -121,7 +130,7 @@
                             <option value="23">MCM</option>
                             <option value="9999">Other</option>
                         </select>
-                        </select>
+                        </select>-->
                     </div>
                 </div>
             </div>
@@ -130,7 +139,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Specialization </label>
-                        {!!Form::text('name',null,['placeholder'=>'Enter Your Specialization','class'=>'form-control','id'=>'register_company_name'])!!}
+                        {!!Form::text('pg_specialization',Auth::user()->userdetail->pg_specialization,['placeholder'=>'Enter Your Specialization','class'=>'form-control'])!!}
                     </div>
                 </div>
             </div>
@@ -139,7 +148,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Institution for post Graduation </label>
-                        {!!Form::text('name',null,['placeholder'=>' University/Institute','class'=>'form-control','id'=>'register_company_name'])!!}
+                        {!!Form::text('pg_institution',Auth::user()->userdetail->pg_institute,['placeholder'=>' University/Institute','class'=>'form-control'])!!}
                     </div>
 
                 </div>
@@ -149,7 +158,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Year</label>
-                        {!!  Form::selectRange('number', 2021,1940, 66, ['class' => 'form-control', 'placeholder'=>' Passing year']) !!}
+                        {!!  Form::selectRange('pg_year', 2021,1940, Auth::user()->userdetail->pg_year, ['class' => 'form-control', 'placeholder'=>' Passing year']) !!}
                     </div>
                 </div>
             </div>
@@ -162,7 +171,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Certification Name </label>
-                        {!!Form::text('name',null,['placeholder'=>'Certification Name','class'=>'form-control','id'=>'register_company_name'])!!}
+                        {!!Form::text('certification_name',Auth::user()->userdetail->certification_name,['placeholder'=>'Certification Name','class'=>'form-control'])!!}
                     </div>
 
                 </div>
@@ -172,7 +181,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Certifiaction Body</label>
-                        {!!Form::text('name',null,['placeholder'=>'Certifiaction Body','class'=>'form-control','id'=>'register_company_name'])!!}
+                        {!!Form::text('certification_body',Auth::user()->userdetail->certification_body,['placeholder'=>'Certifiaction Body','class'=>'form-control'])!!}
                     </div>
                 </div>
             </div>
@@ -181,7 +190,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Year</label>
-                        {!!  Form::selectRange('number', 2021,1940, 66, ['class' => 'form-control', 'placeholder'=>'year']) !!}
+                        {!!  Form::selectRange('certification_year', 2021,1940,Auth::user()->userdetail->certification_year, ['class' => 'form-control', 'placeholder'=>'year']) !!}
                     </div>
 
                 </div>

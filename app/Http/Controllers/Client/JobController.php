@@ -412,6 +412,7 @@ class JobController extends Controller
             }
 
             if ($job->save()) {
+                //return redirect()->route('EmployerProfile')->with('success', ['Job saved']);
                 return back()->with('success', ['Job saved']);
             } else {
                 return back()->withErrors(['Failed to save Job']);

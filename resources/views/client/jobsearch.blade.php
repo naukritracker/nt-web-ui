@@ -74,11 +74,12 @@
                   </div>                                           
               </div>       
         </ul>
-
-        <btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>
+        <button class="btn btn-instagram"  id="k" type="reset" onclick=clicker();>Reset Filters</button>
+        <!--<btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>/-->
 
     </div>
       <div>
+
           <button class="btn btn-instagram"><a href="{{ route('Home')  }}">home</a></button>
       </div>
     <div class="col-sm-9">
@@ -215,6 +216,12 @@
   {!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui.min.js') !!}
 	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
 	<script type="text/javascript">
+
+
+
+
+
+
   // Accordian
   function clicker()
   {

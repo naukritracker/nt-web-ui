@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Employer;
 use App\Models\EmployerUserDetails;
+use function GuzzleHttp\Promise\all;
 use Html;
 use Auth;
 use File;
@@ -250,6 +251,8 @@ class ProfileController extends Controller
         } else {
             $returnArray['ug_institution'] = null;
         }
+
+
 
         if (isset($userdetail->ug_start_date)) {
             $returnArray['ug_start_date']= $userdetail->ug_start_date;
@@ -528,19 +531,15 @@ class ProfileController extends Controller
     {
 
 
-        $this->validate(
-            $request,
-            [
-                'email' => 'required|email|unique:users,email,'.Auth::user()->id,
-                'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'city' => 'required',
-                'current_location' => 'required',
-                'load_image_field' => 'mimes:jpg,png,jpeg,gif|max:12000',
-            ]
-        );
-        try {
+        $this->validate($request,[
+            'email' => 'required|email|unique:users,email,'.Auth::user()->id,
+            'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'city' => 'required',
+            'load_image_field' => 'mimes:jpg,png,jpeg,gif|max:12000',
+        ]);
+        try{
             $user = User::find(Auth::user()->id);
             $user->email = $request->get('email');
             $user->userdetail->first_name = $request->get('first_name');
@@ -550,7 +549,10 @@ class ProfileController extends Controller
             $user->userdetail->contact_no = $request->get('contact_no');
             $user->userdetail->country_code = $request->get('country_code');
             $user->userdetail->current_location = $request->get('current_location');
-
+          //  $user->userdetail->preferred_location = $request->get('preferred_location');
+          //  $user->userdetail->industry = $request->get('industry');
+           // $user->userdetail->functional_area = $request->get('functional_area');
+          //  $user->userdetail->role = $request->get('role');
             $user->userdetail->dob_day = $request->get('dob_day');
             $user->userdetail->dob_month = $request->get('dob_month');
             $user->userdetail->dob_year = $request->get('dob_year');
@@ -558,28 +560,30 @@ class ProfileController extends Controller
             $user->userdetail->marital_status = $request->get('marital_status');
             $user->userdetail->permanent_address = $request->get('permanent_address');
             $user->userdetail->city = $request->get('city');
-            if ($request->hasFile('load_image_field')) {
+            if($request->hasFile('load_image_field')){
                 $imageName = $user->userdetail->id . '.' . $request->file('load_image_field')->getClientOriginalExtension();
-                try {
+                try{
+
                     if (File::exists(public_path().'/uploads/profile/'.$imageName)) {
                         File::delete(public_path().'/uploads/profile/'.$imageName);
                     }
 
-                    $request->file('load_image_field')->move(public_path().'/uploads/profile', $imageName);
-                } catch (\Exception $e) {
+                    $request->file('load_image_field')->move(public_path().'/uploads/profile',$imageName);
+
+                }catch(Exception $e){
                     return back()->withErrors([$e]);
                 }
                 $user->userdetail->profile_image = $imageName;
-            }
 
-            return redirect()->route('Profile', ['#page=profileform']);
+            }
 
             $user->push();
 
-        } catch (\Exception $e) {
-            //echo $e->getMessage(); exit;
+            return redirect()->route('Profile',['#page=profileform']);
+        }catch(Exception $e){
             return back()->withErrors([$e]);
         }
+
     }
 
     public function uploadResume(Request $request)
@@ -644,14 +648,16 @@ class ProfileController extends Controller
 
     public function loadEmploymentDetails(Request $request)
     {
+
+
         if ($request->ajax()) {
             $html = "";
             $userdetail = self::_escapeUserDetail(Auth::user()->userdetail);
             $exps = Experience::where('user_id', Auth::user()->id)->get();
             if (count($exps) > 0) {
-                $html .= '<div class="container-fluid">
+               /* $html .= '<div class="container-fluid">
                 <button class="btn btn-sm btn-success" id="add-exp" data-toggle="modal" data-target="#my-popup">Add more Experience &nbsp;<i class="fa fa-plus-circle"></i></button>
-                </div><br>';
+                </div><br>';*/
                 foreach ($exps as $exp) {
                     if ($exp->company) {
                         $html .= '<div class="panel panel-default">
@@ -662,46 +668,102 @@ class ProfileController extends Controller
 
                         $html .= '<div class="panel-body">';
 
+                        $html .='<table class="table " >
+                           <tr>                          
+                             <th>Location</th>
+                             <td>'.$exp->state->state.'('.$exp->state->country->country.')'.'</td>
+                            </tr>   
+                              <tr>
+                            <th>Start Date</th>
+                             <td>'.$exp->start_date->formatLocalized('%A %d %B %Y').'</td>
+                            </tr>                         
+                             <tr>
+                            <th>End Date</th>
+                             <td>'.$exp->end_date->formatLocalized('%A %d %B %Y').'</td>
+                            </tr> 
+                             <tr>
+                             <th>Designation</th>
+                             <td>'.$exp->designation.'</td>
+                            </tr> 
+                            <tr>
+                             <th>Industry</th>
+                             <td>'.$exp->industries->industry.'</td>
+                            </tr> 
+                             <tr>
+                             <th>Role</th>
+                             <td>'.$exp->role.'</td>
+                            </tr>                                 
+                            <tr>    
+                            <th>Description</th>
+                             <td>'.$exp->description.'</td>
+                            </tr>  
+                             <tr>    
+                            <th>Total Experience</th>
+                             <td>'.$exp->total_years.' Year(s) '. $exp->total_months.' Month(s)</td>
+                            </tr>  
+                            <tr>    
+                            <th>Key Skills</th>
+                             <td>'.$exp->key_skills.'</td>
+                            </tr>                                     
+                            </table>';
+
+
+
                         if ($exp->state_id != 0) {
-                            $html .='<div class="col-sm-6">
+
+
+                           /*$html .='<div class="col-sm-6">
                             <div class="form-group">
                             <label for="location">Location</label>
                             <p>'.$exp->state->state.'('.$exp->state->country->country.')'.'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
 
                         if (strtotime($exp->start_date) > 0) {
-                            $html .= '<div class="col-sm-6">
+
+
+                           /* $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="start_date">Start Date</label>
                             <p>'.$exp->start_date->formatLocalized('%A %d %B %Y').'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
 
                         if (strtotime($exp->end_date) > 0) {
-                            $html .= '<div class="col-sm-6">
+
+                          /*  $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="end_date">End Date</label>
                             <p>'.$exp->end_date->formatLocalized('%A %d %B %Y').'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
 
                         if ($exp->description) {
-                            $html .= '<div class="col-sm-12">
+
+
+                           /* $html .= '<div class="col-sm-12">
                             <div class="form-group">
                             <label for="description">Description</label>
                             <p>'.$exp->description.'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
 
                         if ($exp->annual_thousand == 0
                             and $exp->annual_lakh != 0
                         ) {
-                            $html .= '<div class="col-sm-12">
+                            $html .='<table class="table " >
+                            <tr>    
+                            <th>Annual Salary</th>
+                             <td>'.$exp->annual_lakh.'Lakh(s) in '.$exp->currency.'</td>
+                            </tr>
+                            </table>';
+
+
+                           /* $html .= '<div class="col-sm-12">
                             <div class="form-group">
                             <label for="renumeration"></label>
                             <p>'.$exp->annual_lakh.' Lakh(s) ';
@@ -709,13 +771,22 @@ class ProfileController extends Controller
                                 $html .= ' in '.$exp->currency;
                             }
                             $html .= '</p></div>
-                            </div>';
+                            </div>';*/
                         }
                         else if ($exp->annual_thousand != 0
                             and $exp->annual_lakh != 0
                         )
                         {
-                            $html .= '<div class="col-sm-12">
+
+                            $html .='<table class="table " >
+                            <tr>    
+                            <th>Annual Salary</th>
+                             <td>'.$exp->annual_lakh.' Lakh(s) '.$exp->annual_thousand.' Thousand(s) in '.$exp->currency.'</td>
+                            </tr>
+                            </table>';
+
+
+                           /*$html .= '<div class="col-sm-12">
                             <div class="form-group">
                             <label for="renumeration"></label>
                             <p>'.$exp->annual_lakh.' Lakh(s) '.$exp->annual_thousand.' Thousand(s)';
@@ -723,41 +794,41 @@ class ProfileController extends Controller
                                 $html .= ' in '.$exp->currency;
                             }
                             $html .= '</p></div>
-                            </div>';
+                            </div>';*/
 
                         }
 
 
 
                         if ($exp->industry) {
-                            $html .= '<div class="col-sm-6">
+                            /*$html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="industry">Industry</label>
                             <p>'.$exp->industries->industry.'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
 
 
                         if ($exp->functional_area) {
-
+/*
                             $html .= '<div class="col-sm-6">
                             <div class="form-group">
-                            <label for="functional_area">Functional Area</label>
-                            <p>'.$exp->functional_area.'</p>
+                            <label for="functional_area">Functional area</label>
+                            <p>'.$exp->functional_area;'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
                         if ($exp->role) {
-                            $html .= '<div class="col-sm-6">
+                           /* $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="role">Role</label>
                             <p>'.$exp->role.'</p>
                             </div>
-                            </div>';
+                            </div>';*/
                         }
                     } else {
-                        $html .= '<p class="text-center">Fresher</p>';
+                        /*$html .= '<p class="text-center">Fresher</p>';*/
                     }
 
                     $html .= '</div></div>';
@@ -766,7 +837,7 @@ class ProfileController extends Controller
                 $html .= '<div class="jumbotron">
                   <h1>Hello, '.$userdetail->first_name.'!</h1>
                   <p>There are many fields in life where you might be uniquely talented. Let us know so we can find you the dream job you have been looking for.</p>
-                  <p> <button class="btn btn-sm btn-success" id="add-exp" data-toggle="modal" data-target="#my-popup">Tell us more about yourself &nbsp;<i class="fa fa-paint-brush"></i></button></p>
+                  <p> <button class="btn btn-sm btn-success" id="add-exp" data-toggle="modal" data-target="#my-popup">Add Employment Details&nbsp;<i class="fa fa-paint-brush"></i></button></p>
                 </div>';
 
 
@@ -823,24 +894,46 @@ class ProfileController extends Controller
                 if ($request->get('company') != 0) {
                     $exp = new Experience;
                     $company = Company::find($request->get('company'));
+
+
                     $exp->company_id = $request->get('company');
                     $exp->state_id = $company->state_id;
                     $exp->user_id = Auth::user()->id;
-                    $exp->start_date = $request->get('experience_start_date');
-                    $exp->end_date = $request->get('experience_end_date');
-                    $carbonStart = Carbon::createFromTimestamp(strtotime($request->get('experience_start_date')));
-                    $carbonEnd = Carbon::createFromTimestamp(strtotime($request->get('experience_end_date')));
-                    $exp->total_experience = $carbonEnd->diffInYears($carbonStart);
-                    $exp->description = $request->get('employement_description');
+                 //   $exp->start_month = $request->get('start_month');
+                 //  $exp->start_year = $request->get('start_year');
+                  //  $exp->end_month = $request->get('end_month');
+                   //$exp->end_year = $request->get('end_year');
+                   $exp->start_date = $request->get('experience_start_date');
+                 // $exp->end_date = $request->get('experience_end_date');
+                  // $carbonStart = Carbon::createFromTimestamp(strtotime($request->get('experience_start_date')));
+                  // $carbonEnd = Carbon::createFromTimestamp(strtotime($request->get('experience_end_date')));
+                   // $exp->total_experience = $carbonEnd->diffInYears($carbonStart);
+                    $exp->designation = $request->get('designation');
+                    $exp->prev_company = $request->get('previous_company');
+                    $exp->prev_start_date = $request->get('prev_experience_start_date');
+                   $exp->prev_end_date = $request->get('prev_experience_end_date');
+                  //  $exp->prev_start_month = $request->get('prev_start_month');
+                  // $exp->prev_start_year = $request->get('prev_start_year');
+                  // $exp->prev_end_month = $request->get('prev_end_month');
+                  // $exp->prev_end_year = $request->get('prev_end_year');
+                   $exp->prev_designation = $request->get('prev_designation');
                     $exp->annual_lakh = $request->has('annual_lakh') ? $request->get('annual_lakh') : 0;
                     $exp->annual_thousand = $request->has('annual_thousand') ? $request->get('annual_thousand') : 0;
                     $exp->currency = $request->get('currency');
+                    $exp->key_skills = $request->get('key_skills');
+                    $exp->description = $request->get('employement_description');
+                    $exp->total_years = $request->get('total_years');
+                    $exp->total_months = $request->get('total_months');
                     $exp->industry = $request->get('industry');
                     $exp->functional_area = $request->get('functional_area');
                     $exp->role = $request->get('role');
                     $exp->save();
+
+
                 }
-                return 1;
+
+
+               return 1;
             }
         } else {
 
@@ -884,39 +977,58 @@ class ProfileController extends Controller
    public function saveEducationDetails(Request $request){
         $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
 
-        $userdetails->sse_institution = $request->get('10_educational_institute_name');
-        $userdetails->sse_start_date = $request->get('10_education_start_date');
-        $userdetails->sse_end_date = $request->get('10_education_end_date');
-        $userdetails->sse_type = $request->get('10_course');
+       // $userdetails->sse_institution = $request->get('10_educational_institute_name');
+        //$userdetails->sse_start_date = $request->get('10_education_start_date');
+       // $userdetails->sse_end_date = $request->get('10_education_end_date');
+        //$userdetails->sse_type = $request->get('10_course');
         // $userdetails->sse_marks = $request->get('10_marks');
 
-        $userdetails->hsse_institution = $request->get('12_educational_institute_name');
-        $userdetails->hsse_start_date = $request->get('12_education_start_date');
-        $userdetails->hsse_end_date = $request->get('12_education_end_date');
-        $userdetails->hsse_type = $request->get('12_course');
+        //$userdetails->hsse_institution = $request->get('12_educational_institute_name');
+       // $userdetails->hsse_start_date = $request->get('12_education_start_date');
+       // $userdetails->hsse_end_date = $request->get('12_education_end_date');
+       // $userdetails->hsse_type = $request->get('12_course');
         // $userdetails->hsse_marks = $request->get('12_marks');
 
-        $userdetails->ug_institution = $request->get('ug_educational_institute_name');
-        $userdetails->ug_start_date = $request->get('ug_education_start_date');
-        $userdetails->ug_end_date = $request->get('ug_education_end_date');
-        $userdetails->ug_type = $request->get('ug_course');
+      // $userdetails->ug_institution = $request->get('ug_educational_institute_name');
+       // $userdetails->ug_start_date = $request->get('ug_education_start_date');
+        //$userdetails->ug_end_date = $request->get('ug_education_end_date');
+        //$userdetails->ug_type = $request->get('ug_course');
         // $userdetails->ug_marks = $request->get('ug_marks');
 
-        $userdetails->pg_institution = $request->get('pg_educational_institute_name');
-        $userdetails->pg_start_date = $request->get('pg_education_start_date');
-        $userdetails->pg_end_date = $request->get('pg_education_end_date');
-        $userdetails->pg_type = $request->get('pg_course');
+      //  $userdetails->pg_institution = $request->get('pg_educational_institute_name');
+      //  $userdetails->pg_start_date = $request->get('pg_education_start_date');
+      //  $userdetails->pg_end_date = $request->get('pg_education_end_date');
+       // $userdetails->pg_type = $request->get('pg_course');
         // $userdetails->pg_marks = $request->get('pg_marks');
 
-        $userdetails->other_institution = $request->get('other_educational_institute_name');
-        $userdetails->other_start_date = $request->get('other_education_start_date');
-        $userdetails->other_end_date = $request->get('other_education_end_date');
-        $userdetails->other_type = $request->get('other_course');
+        //$userdetails->other_institution = $request->get('other_educational_institute_name');
+       // $userdetails->other_start_date = $request->get('other_education_start_date');
+       // $userdetails->other_end_date = $request->get('other_education_end_date');
+       // $userdetails->other_type = $request->get('other_course');
         // $userdetails->other_marks = $request->get('other_marks');
+
+       $userdetails->graduation = $request->get('graduation');
+       $userdetails->ug_specialization = $request->get('ug_specialization');
+       $userdetails->ug_institute = $request->get('ug_institution');
+       $userdetails->ug_year = $request->get('ug_year');
+
+       $userdetails->post_graduation = $request->get('postgraduation');
+       $userdetails->pg_specialization = $request->get('pg_specialization');
+       $userdetails->pg_institute = $request->get('pg_institution');
+       $userdetails->pg_year = $request->get('pg_year');
+
+       $userdetails->certification_name = $request->get('certification_name');
+       $userdetails->certification_body = $request->get('certification_body');
+       $userdetails->certification_year = $request->get('certification_year');
+       $userdetails->ug_year = $request->get('ug_year');
+
+
 
         $userdetails->save();
 
-        return redirect()->route('Profile',['#page=educationdetails']);
+
+        return redirect()->route('Profile',['#page=educationdetails'])->withInput();
+
     }
 
     public function loadChangePassword(Request $request, FormBuilder $formbuilder)

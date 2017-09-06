@@ -152,10 +152,30 @@ class RegisterController extends Controller
 
         $newuser->active_flag = 1;
         $newuser->save();
+
+
+        $userdetails = new UserDetail;
+        $userdetails->user_id = $newuser->id;
+        $userdetails->first_name = $request->get('first_name');
+        //$userdetails->last_name = 'shenoy';
+        $userdetails->graduation = 'abc';
+       // $userdetails->ug_specialization = 'abc';
+       //$userdetails->ug_institute ='abc';
+        $userdetails->ug_year = 4444;
+
+        $userdetails->save();
+
+
+
+
+
+
+
+
+
         $candidate = Role::where('name', 'candidate')->first();
         $newuser->attachRole($candidate);
         $newuser->save();
-
 //        Mail::send(
 //            'emails.confirmregistration',
 //            ['link' => route('ConfirmRegistration', ['email'=>$newuser->email,'code'=>$confirmation_code])],

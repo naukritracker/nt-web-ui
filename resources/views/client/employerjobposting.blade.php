@@ -114,6 +114,7 @@
                             CKEDITOR.instances['description'].setData('');
                         }
                     });
+
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.log(errorThrown);
                 if (jqXHR.status == 401) {
