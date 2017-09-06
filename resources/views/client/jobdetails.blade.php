@@ -251,7 +251,7 @@
             
             <div class="col-sm-4 mar-b30">
                 <!-- @include('client.partials.subscribetonewsletter') -->
-                @include('client.partials.homeads')
+               <!-- @include('client.partials.homeads') -->
             </div>
         </div>
     </div>

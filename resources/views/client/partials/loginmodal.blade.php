@@ -70,6 +70,7 @@
                   <!--LOGIN BUTTON FOR LINKED IN-->
                   <a class="btn btn-default btn-block" style="background-color: #005983" href="{!! URL::route('ShowLinkedInLogin') !!}" title="Log in with LinkedIn"><i class="fa fa-linkedin-square" style="font-size:21px; color:#fff;"></i></a> 
                 </div>
+
             </div>
 	  </div>
           <div class="pad-t20 clearfix">

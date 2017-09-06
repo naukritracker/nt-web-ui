@@ -74,11 +74,12 @@
                   </div>                                           
               </div>       
         </ul>
-
-        <input type="reset" id="k" value="Reset Filters" onclick=clicker();>
+        <button class="btn btn-instagram"  id="k" type="reset" onclick=clicker();>Reset Filters</button>
+        <!--<btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>/-->
 
     </div>
       <div>
+
           <button class="btn btn-instagram"><a href="{{ route('Home')  }}">home</a></button>
       </div>
     <div class="col-sm-9">
@@ -215,10 +216,17 @@
   {!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui.min.js') !!}
 	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
 	<script type="text/javascript">
+
+
+
+
+
+
   // Accordian
   function clicker()
   {
-      window.location="http://localhost:8000/search/jobs"
+      window.location="/search/jobs"
+      $('#slider').slider("value",0)
   }
         var action="click";
         var speed="500";
@@ -398,7 +406,9 @@
         }
 
 
-        $('#sortbyselection').on('change',function() {
+  $('#slider').slider("value",0)
+
+  $('#sortbyselection').on('change',function() {
           var form = $('form#search_jobs_form');
           var order = $(this).val();
           var input = $("<input>")
