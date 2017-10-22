@@ -14,8 +14,8 @@
                         <span>{{$job->state->state}} / {{$job->country->country}}</span>
                     @endif
 
-                    @if($job->updated_at)
-                        <span>{{$job->updated_at->diffForHumans()}}</span>                            
+                    @if($job->created_at)
+                        <span>{{$job->created_at->diffForHumans()}}</span>
                     @endif
                 </p>
                 <p class="lj-description">{{$job->short_description}}</p>
@@ -25,4 +25,4 @@
         </ul>
         <p class="txtc pad-t20"><a href="{{URL::route('SearchJobs')}}">View All &raquo;</a></p>
     </div>
-    <!-- Latest Jobs Ends Here -->
+    <!-- Latest Jobs Ends Here -->a

@@ -37,9 +37,9 @@ class SearchFormBuilder extends CommonFormBuilder
 
         $selectexp = array();
         for ($i=0; $i < 65; $i++) {
-            $selectexp[$i] = $i.'+ ';
-            if ($i > 1) {
-                $selectexp[$i] .= 'years';
+            $selectexp[$i] = $i.' ';
+            if ($i >= 1) {
+                $selectexp[$i] ;
             } else {
                 $selectexp[$i] .= 'year';
             }

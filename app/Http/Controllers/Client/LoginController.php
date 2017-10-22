@@ -346,8 +346,8 @@ class LoginController extends Controller
                 ['username' => $user->name, 'useremail' => $user->email,'password' => $newpassword],
                 function ($m) use ($email) {
                     $m->from(
-                        env('DEFAULT_MAIL_ID', 'no-reply@naukritracker.com'),
-                        env('APP_NAME', 'Naukri Tracker')
+                        'no-reply@naukritracker.com'
+                        , 'Naukri Tracker'
                     );
 
                     $m->to($email)->subject('Naukri Tracker - Password reset requested');

@@ -2,6 +2,7 @@
 
 namespace App\Helpers\FormBuilder;
 
+use App\Models\Country;
 use Auth;
 use App\Models\FunctionalArea;
 use App\Models\Industry;
@@ -26,7 +27,7 @@ class ProfileFormBuilder extends CommonFormBuilder
         }
 
         $dob_year_options = array();
-        for ($i=1947; $i < 2000; $i++) {
+        for ($i=1947; $i < 2017; $i++) {
             $dob_year_options[$i] = $i;
         }
 
@@ -46,10 +47,10 @@ class ProfileFormBuilder extends CommonFormBuilder
             }
         }
 
-        $locations = State::all();
+        $locations = Country::all();
         $selectlocations = array();
         foreach ($locations as $l) {
-            $selectlocations[$l->id] = $l->state;
+            $selectlocations[$l->id] = $l->country;
         }
 
         $selectindustry = array();

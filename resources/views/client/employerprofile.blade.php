@@ -112,8 +112,8 @@
                         <?php if ($jobCount < 10) { ?>
                         <tr>
                             <td>{{ $job->title }}</td>
-                            <td class="text-center">{{ count($job->applications) }}</td>
-                            <td class="text-center">{{ count($job->applications) }}</td>
+                            <td class="text-center">{{ $job->no_of_views}}</td>
+                            <td class="text-center">{{ $job->no_of_applicants }}</td>
                           <!--  <td>@if(count($job->applications)) <a href="#">View Applicants</a>@else No Views @endif</td> -->
                             <td>
                                 <a href="{{ URL::route('ShowEmployerJobPosting') }}?edit={{ $job->id }}">Edit</a> /

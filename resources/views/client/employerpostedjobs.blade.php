@@ -65,7 +65,7 @@
                             <th>Job</th>
                             <th class="text-center">Views</th>
                             <th class="text-center">Candidates Applied</th>
-                            <th>Match Candidates</th>
+                           <!-- <th>Match Candidates</th>-->
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -73,9 +73,9 @@
                         @foreach(Auth::user('employer')->jobs as $job)
                         <tr>
                             <td>{{ $job->title }}</td>
-                            <td class="text-center">{{ count($job->applications) }}</td>
-                            <td class="text-center">{{ count($job->applications) }}</td>
-                            <td>@if(count($job->applications)) <a href="#">View Applicants</a>@else No Views @endif</td>
+                            <td class="text-center">{{ $job->no_of_views }}</td>
+                            <td class="text-center">{{ $job->no_of_applicants }}</td>
+                           <!-- <td>@if(count($job->applications)) <a href="#">View Applicants</a>@else No Views @endif</td>-->
                             <td>
                                 <a href="{{ URL::route('ShowEmployerJobPosting') }}?edit={{ $job->id }}">Edit</a> /
                                 <a href="{{ URL::route('ShowEmployerJobPosting') }}?copy={{ $job->id }}">Copy</a> /

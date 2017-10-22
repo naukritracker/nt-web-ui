@@ -2,8 +2,8 @@
 <div class="col-xs-12">
     <div class="row pad-t10">
         <div class="form-group">
-            <label for="old_password">Old Password</label>
-            {!! Form::password('old_password', ['class'=>'form-control', 'id'=>'old_password','placeholder'=>'Old Password']) !!}
+            <label for="old_password">Current Password</label>
+            {!! Form::password('old_password', ['class'=>'form-control', 'id'=>'old_password','placeholder'=>'Current Password']) !!}
         </div>
     </div>
 </div>

@@ -12,7 +12,7 @@ class JobPostingHasApplication extends Model
      *
      * @var string
      */
-    protected $table = 'jobposting';
+    protected $table = 'jobposting_has_application';
 
     protected $dates = ['created_at','updated_at'];
 

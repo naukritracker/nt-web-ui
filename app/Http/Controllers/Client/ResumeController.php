@@ -28,7 +28,7 @@ class ResumeController extends Controller
     /**
      * Load search jobs filter data.
      *
-     * @param object $request     Request object
+     * @param object $request Request object
      * @param object $formbuilder Form Builder object
      *
      * @return array
@@ -95,29 +95,18 @@ class ResumeController extends Controller
         }
         $singleTerm = $request->has('type') ? $request->input('type') : 0;
         if ($singleTerm) {
+
             $searchBoxArr = $request->has('search') ? [$request->input('search')] : [];
         } else {
             $searchBoxArr = $request->has('search') ? array_filter(explode(' ', $request->input('search'))) : [];
         }
         $userDetailIdResumeSearch = $this->scanAllResumesForKeywords($searchBoxArr);
         $userDetailsFromSearch = UserDetail::whereIn('profile_headline', $searchBoxArr)
-            ->where(
-                function ($query) use ($searchBoxArr) {
-                    foreach ($searchBoxArr as $search) {
-                        $query->orWhere('role', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('city', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('marital_status', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('sse_institution', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('hsse_institution', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('ug_institution', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('pg_institution', 'LIKE', '%'.$search.'%');
-                        $query->orWhere('other_institution', 'LIKE', '%'.$search.'%');
-                    }
-                }
-            )
+
+
             ->orWhere(
                 function ($query) use ($searchBoxArr) {
-                    $industries = Industry::where(
+                    $industries =Industry::where(
                         function ($innerQuery) use ($searchBoxArr) {
                             foreach ($searchBoxArr as $search) {
                                 $innerQuery->orWhere('industry', 'LIKE', '%'.$search.'%');
@@ -139,6 +128,9 @@ class ResumeController extends Controller
                         }
                     )->select('id')->get()->toArray();
 
+
+
+
                     $query->orWhereIn('state_id', $areas)
                         ->orWhereIn('current_location', $areas)
                         ->orWhereIn('preferred_location', $areas)
@@ -151,10 +143,25 @@ class ResumeController extends Controller
         }
         $userDetailIdSearchDb = $userDetailsFromSearch->get()->toArray();
         $userDetailIdSearch = array_merge($userDetailIdResumeSearch, $userDetailIdSearchDb);
-        $finalMergedDetailIds = array_merge(
-            array_merge($userDetailIdLocations, $userDetailIdIndustries),
-            array_merge($userDetailIdFunctionalArea, $userDetailIdSearch)
-        );
+
+
+        if(!($request->has('search'))) {
+            $finalMergedDetailIds = array_merge(
+                array_merge($userDetailIdLocations, $userDetailIdFunctionalArea),
+                array_merge($userDetailIdLocations, $userDetailIdIndustries),
+                array_merge($userDetailIdLocations, $userDetailIdIndustries, $userDetailIdFunctionalArea),
+                array_merge($userDetailIdIndustries, $userDetailIdFunctionalArea)
+            );
+        }
+        else{
+            $finalMergedDetailIds = array_merge(
+                array_merge($userDetailIdFunctionalArea, $userDetailIdSearch)
+            );
+
+        }
+
+
+
         $finalUniqueDetailIds = array_unique($finalMergedDetailIds, SORT_REGULAR);;
         $query = User::where('active_flag', '=', 1)
             ->where(
@@ -196,6 +203,7 @@ class ResumeController extends Controller
      */
     public function scanAllResumesForKeywords(array $search)
     {
+
         $result = [];
         $users = UserDetail::all();
         foreach ($search as $word) {
@@ -203,6 +211,12 @@ class ResumeController extends Controller
                 if ($user->media and $user->media->content != '' and isset($user->media->raw)) {
                     if (preg_match("/\b" . $word . "\b/i", $user->media->raw)) {
                         $result[] = $user->toArray();
+                      print "success";
+                        error_log('message here.');
+                    }
+                    else
+                    {
+                        print "fail";
                     }
                 }
             }
