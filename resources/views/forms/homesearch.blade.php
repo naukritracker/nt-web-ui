@@ -1,107 +1,45 @@
+<div id="shake">
 <h1 class="l-title white-title txtc">Search Jobs</h1>
 <div class="primary-box clearfix">
-    {!! Form::open(array('route'=>'SearchForJobs','class'=>'row hpad20 hmar mar-t15', 'id'=>'searchForm')) !!}
+    {!! Form::open(array('route'=>'SearchForJobs','class'=>'row hpad20 hmar mar-t15', 'id'=>'searchForm', 'name'=>'searchForm','onsubmit'=>'shakeForm();')) !!}
     <div class="form-group col-sm-3 col-xs-12 hpad5">
-        {!! Form::text('search_value', null, ['class'=>'form-control','placeholder'=>'Skills, Designation']) !!}
+        <input type="text"  name="search_value" class="form-control" placeholder="Skills, Designation" id=tags onclick="ch1(); " >
+
     </div>
     <div class="form-group col-sm-2 col-xs-12 hpad5" >
-        <select  class='form-control'name="select1" id="select1">
-            <option value="0" selected>Locations</option>
-            <option value="1">Dubai(United Arab Emirites)</option>
-            <option value="1">Ajman(United Arab Emirites)</option>
-            <option value="1">Abu Dhabi(United Arab Emirites)</option>
-            <option value="4">Al Manamah(Al Asimah)(Bahrain)</option>
-            <option value="1">Sharjah(United Arab Emirites)</option>
-            <option value="6">Al madinah al munawarah(Saudi Arabia)</option>
-            <option value="1">Ras al Khaimah(United Arab Emirites)</option>
-            <option value="8">Masqut(Oman)</option>
-            <option value="6">Ar Riyad(Saudi Arabia)</option>
-            <option value="10">Ar Dawhaw(Qatar)</option>
-            <option value="1">Fujairah(Al Asimah)(United Arab Emirites)</option>
-            <option value="12">Al Kuwayt(Al Asimah)(Kuwait)</option>
-        </select>
-
+        {!! Form::select('state_id', $selectstate, null, ['placeholder'=>'Location','class'=>'form-control','id'=>'select1']) !!}
     </div>
     <div class="form-group col-sm-2 col-xs-6 hpad5">
-
-        <select class='form-control' name="select2" id="select2">
-            <option value="0" selected>Visa</option>
-
-            <option value="8">Employment</option>
-            <option value="8">Employment Contracting</option>
-            <option value="8">Family Joining / Residence</option>
-            <option value="8">Student Resident</option>
-            <option value="8">Investor Resident</option>
-            <option value="8">Express</option>
-            <option value="8">Multiple Entry</option>
-            <option value="8">Relative / Friend Visit</option>
-            <option value="8">Official Visit</option>
-            <option value="8">Troupe (Artist)</option>
-            <option value="8">Truck Drivers</option>
-            <option value="8">Transit</option>
-            <option value="8">Road Transit</option>
-            <option value="8">Seamen's Transit</option>
-            <option value="8">Scientific Research</option>
-            <option value="8">Tourist</option>
-            <option value="8">Visa Facility with Dubai</option>
-            <option value="8">Common Visa with Qatar</option>
-            <option value="8">Ship Passengers & Crew</option>
-            <option value="8">Residents of AGCC States</option>
-            <option value="8">Companions of GCC Nationals</option>
-
-            <option value="6">Business</option>
-            <option value="6">Commercial</option>
-            <option value="6">Diplomatic and Official</option>
-            <option value="6">Employment</option>
-            <option value="6">Escort</option>
-            <option value="6">Extension of exit / Re-Entry</option>
-            <option value="6">Family Visit</option>
-            <option value="6">Government Visit</option>
-            <option value="6">Personal Visit</option>
-            <option value="6">Residence Visit</option>
-            <option value="6">Student Visit</option>
-            <option value="6">Work Visit</option>
-            <option value="6">Hajj</option>
-            <option value="6">Umrah</option>
-
-            <option value="1">AGCC Citizens</option>
-            <option value="1">Western Europe and Pacific Rim Citizens</option>
-            <option value="1">Entry Service Permit</option>
-            <option value="1">Visit</option>
-            <option value="1">Tourist</option>
-            <option value="1">Multiple Entry</option>
-            <option value="1">Residence</option>
-
-            <option value="4">Residence</option>
-            <option value="10">Residence</option>
-            <option value="12">Residence</option>
-        </select>
-
+        {!! Form::select('visa_type', $selectvisa, null, ['placeholder'=>'Visa','id'=>'select2','class'=>'form-control']) !!}
     </div>
     <div class="form-group col-sm-1 col-xs-6 hpad5">
-        {!! Form::select('experience',['0-1 year','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'], null, ['placeholder'=>'Exp','class'=>'form-control']) !!}
-    </div>
+        {!! Form::select('experience', $selectexp, null, ['placeholder'=>'Exp','class'=>'form-control','id'=>'exp']) !!}    </div>
     <div class="form-group  col-sm-3 col-xs-12 hpad5">
         {!! Form::select(
             'functional_area',
             $selectfunctionalarea,
             null,
-            ['placeholder'=>'Functional Area','class'=>'form-control']
+            ['placeholder'=>'Functional Area','class'=>'form-control','id'=>'fun_area']
         ) !!}
     </div>
     <div class="form-group  col-sm-1 col-xs-12 hpad5">
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" id="gh" class="btn btn-primary">Search</button>
     </div>
+
     {!!Form::token()!!}
     {!!Form::close()!!}
 </div>
-<h3 class="m-title white-title txtc pad-t20">Browse jobs by category</h3>
+
+</div>
+<h3 class="m-title white-title txtc pad-t20">Browse jobs by </h3>
 <ul class="b-jobs row hmar10 pad-t10" style="padding-left:15%;">
-   <!-- <li class="col-md-2 col-sm-3 col-sm-offset-1 col-md-offset-3 col-xs-6 hpad10"><a href="{{ route('SearchJobs') }}"><span class="sp-icon sp-user"></span> Location</a></li> -->
-    <li class="col-md-2 col-sm-3 col-xs-push-4 hpad10"><a href="{{ route('SearchJobs') }}"><span class="sp-icon sp-category"></span> Category</a></li>
+<li class="col-md-2 col-sm-3 col-sm-offset-1 col-md-offset-3 col-xs-6 hpad10"><a href="{{ route('SearchJobs') }}"><span class="sp-icon sp-location"></span> Location</a></li><li class="col-md-2 col-sm-3 col-xs-6 hpad10"><a href="{{ route('SearchJobs') }}"><span class="sp-icon sp-category"></span> Category</a></li>
 </ul>
+
 <!--
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+
 <script>
     $("#select1").change(function() {
         if ($(this).data('options') === undefined) {
@@ -112,5 +50,43 @@
         var options = $(this).data('options').filter('[value=' + id + ']');
         $('#select2').html(options);
     });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+        var availableTags = [
+            "ActionScript",
+            "AppleScript",
+            "Asp",
+            "BASIC",
+            "C",
+            "C++",
+            "Clojure",
+            "COBOL",
+            "ColdFusion",
+            "Erlang",
+            "Fortran",
+            "Groovy",
+            "Haskell",
+            "Java",
+            "JavaScript",
+            "Lisp",
+            "Perl",
+            "PHP",
+            "Python",
+            "Ruby",
+            "Scala",
+            "Scheme"
+        ];
+        $( "#tags" ).autocomplete({
+            source: availableTags
+        });
+    } );
+
+
+    , 'onclick'=>'ch();'
 </script>
 -->

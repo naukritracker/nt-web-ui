@@ -1,4 +1,4 @@
-{!! Form::open(['route'=>'RegisterClient', 'id'=>'register_form', 'class'=>'row pad-t10 pad-b10', 'files'=>true]) !!}
+{!! Form::open(['route'=>'RegisterClient', 'id'=>'register_form', 'class'=>'row pad-t10 pad-b10', 'files'=>'true']) !!}
 <div class="row">
 
 

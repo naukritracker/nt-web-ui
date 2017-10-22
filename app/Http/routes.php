@@ -426,6 +426,7 @@ Route::get('termsandconditions', ['as'=>'ShowTermsAndConditions', 'uses'=>'Clien
 //GET|POST View search jobs page - @param String country_slug,  @param String state_slug
 Route::any('search/jobs/{country?}/{state?}', ['as'=>'SearchJobs', 'uses'=>'Client\JobController@showSearchJobs']);
 
+
 //AJAX load data for populating filters
 Route::post('search/jobs/load/async/data', ['as'=>'LoadSearchJobsFilterData', 'uses'=>'Client\JobController@loadFilterData']);
 
@@ -433,7 +434,7 @@ Route::post('search/jobs/load/async/data', ['as'=>'LoadSearchJobsFilterData', 'u
 Route::any('search/results', ['as'=>'SearchForJobs', 'uses'=>'Client\JobController@searchJobs']);
 
 //GET|POST View search job details - @param ID job
-Route::get('job/details/{id}', ['as'=>'JobDetails', 'uses'=>'Client\JobController@showJobDetails']);
+Route::any('job/details/{id}', ['as'=>'JobDetails', 'uses'=>'Client\JobController@showJobDetails']);
 
 
 
@@ -442,7 +443,7 @@ Route::post('contact-us/form', ['as'=>'ContactUsForm', 'uses'=>'Client\ContactCo
 
 // ACCESS LEVEL : User
 Route::group(['middleware' => 'auth.user'], function () {
-
+    Route::get('myview/{id}', ['as'=>'Myview', 'uses'=>'Client\ProfileController@show']);
     //GET View profile page
     Route::get('profile', ['as'=>'Profile', 'uses'=>'Client\ProfileController@showProfile']);
 

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\JobPostingHasApplication;
+use App\Models\UserDetail;
 use Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Visa;
 use App\Models\JobPosting;
+
 use Illuminate\Http\Request;
 use App\Helpers\Contracts\FormBuilderContract as FormBuilder;
 use Redirect;
@@ -31,44 +33,57 @@ class JobController extends Controller
 
     public function showSearchJobs(Request $request, $country = null, $state = null)
     {
-        $jobposting = new JobPosting;
-        $order = ($request->input('order') != '') ? $request->input('order') : 'updated_at';
-        if ($country != null) {
-            if ('all-gulf-countries' == $country) {
-                $countrydata = Country::whereIn(
-                    'slug',
-                    ['united-arab-emirates', 'saudi-arabia', 'oman', 'qatar', 'kuwait', 'bahrain']
-                )->get();
-            } else {
-                $countrydata = Country::where('slug', $country)->get();
-            }
-            $jobposting->where(function ($query) use ($countrydata) {
-                if (count($countrydata)) {
-                    foreach ($countrydata as $country) {
-                        $query->orWhere('country_id', $country->id);
-                    }
+        if($request->ajax()){
+            if($country != null){
+                if($state != null){
+                    $statedata = State::where('slug',$state)->first();
+                    $countrydata = Country::where('slug',$country)->first();
+                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('state_id',$statedata->id)->where('active_flag',1)->paginate(10);
+                }else{
+
+                    $countrydata = Country::where('slug',$country)->first();
+                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('active_flag',1)->paginate(10);
                 }
-            });
-            if ($state != null) {
-                $statedata = State::where('slug', $state)->first();
-                $jobposting->where('state_id', $statedata->id);
+            }else{
+                $jobs = JobPosting::where('active_flag',1)->paginate(10);
             }
-            $jobs = $jobposting->where('active_flag', 1)->orderBy($order, 'desc')->paginate(10);
-        } else {
-            $jobs = $jobposting->where('active_flag', 1)->orderBy($order, 'desc')->paginate(10);
-        }
-        if ($request->ajax()) {
+
             return json($jobs);
-        } else {
-            $availablejobs = JobPosting::where('active_flag', 1)->count();
-            $data['jobs'] = $jobs;
-            return view('client.jobsearch')->with('data', $data)
-                ->with('availablejobs', $availablejobs)
-                ->with('order', $order);
+
+        }else{
+
+            $order = $request->input('order');
+            if($order == '') $order = 'updated_at';
+
+            if($country != null){
+                if ('all-gulf-countries' == $country) {
+                    $country = 'united-arab-emirates';
+                }
+                if($state != null){
+                    $statedata = State::where('slug',$state)->first();
+                    $countrydata = Country::where('slug',$country)->first();
+                    $data['jobs'] = JobPosting::where('country_id',$countrydata->id)
+                        ->where('state_id',$statedata->id)
+                        ->where('active_flag',1)
+                        ->orderBy($order,'desc')
+                        ->paginate(10);
+
+                }else{
+                    $countrydata = Country::where('slug',$country)->first();
+                    $data['jobs'] = JobPosting::where('country_id',$countrydata->id)
+                        ->where('active_flag',1)
+                        ->orderBy($order,'desc')
+                        ->paginate(10);
+                }
+            }else{
+                $data['jobs'] = JobPosting::where('active_flag',1)
+                    ->orderBy($order,'desc')
+                    ->paginate(10);
+            }
+
+            $availablejobs = JobPosting::where('active_flag',1)->count();
+            return view('client.jobsearch')->with('data',$data)->with('availablejobs',$availablejobs)->with('order',$order);
         }
-
-
-
     }
 
     /**
@@ -242,10 +257,54 @@ class JobController extends Controller
      */
     public function showJobDetails(Request $request, $id)
     {
+
+        $job = JobPosting::find($id);
+
+        $job->no_of_applicants = $job->no_of_applicants+$request->get('sp');
+        $job->no_of_views = $job->no_of_views+1;
+
+        $job->save();
+        if (Auth::user()) {
+            $user = Auth::user();
+
+            $application = JobPostingHasApplication::where('user_id', $user->id)->where('jobposting_id', $id)->first();
+            if ($application) {
+                $application->count = $application->count + $request->get('sp');
+            } else {
+                $application = new JobPostingHasApplication();
+                $application->user_id = $user->id;
+
+                $application->jobposting_id = $id;
+                $application->count = 1;
+            }
+            $application->save();
+
+
+
+        } else if (Auth::user('employer')) {
+            return back()->withErrors(['Restricted Operation']);
+        }
+
+        if (Auth::user()) {
+            $user = Auth::user();
+            $ud=UserDetail::where('user_id', $user->id)->first();
+            $application = JobPostingHasApplication::where('user_id', $user->id)->where('jobposting_id', $id)->first();
+            if($application->count==2)
+            {
+                $ud->application_count= $ud->application_count+$request->get('sp');
+            }
+
+
+            $ud->save();
+        }
+
+
+
         if ($request->ajax()) {
             return false;
         } else {
             $data['job'] = JobPosting::find($id);
+
             return view('client.jobdetails')->with('data', $data);
         }
     }
@@ -412,8 +471,8 @@ class JobController extends Controller
             }
 
             if ($job->save()) {
-                //return redirect()->route('EmployerProfile')->with('success', ['Job saved']);
-                return back()->with('success', ['Job saved']);
+                return redirect()->route('EmployerProfile')->with('success', ['Job saved']);
+                //return back()->with('success', ['Job saved']);
             } else {
                 return back()->withErrors(['Failed to save Job']);
             }
@@ -441,17 +500,17 @@ class JobController extends Controller
     public function registerJobApplication($id, $url)
     {
         if (Auth::user()) {
-            $user = Auth::user();
-            $application = JobPostingHasApplication::where('user_id', $user->id)->where('jobposting_id', $id)->first();
-            if ($application) {
-                $application->count = $application->count + 1;
-            } else {
-                $application = new JobPostingHasApplication();
-                $application->user_id = $user->id;
-                $application->jobposting_id = $id;
-                $application->count = 1;
-            }
-            $application->save();
+                $user = Auth::user();
+                $application = JobPostingHasApplication::where('user_id', $user->id)->where('jobposting_id', $id)->first();
+                if ($application) {
+                    $application->count = $application->count + 1;
+                } else {
+                    $application = new JobPostingHasApplication();
+                    $application->user_id = $user->id;
+                    $application->jobposting_id = $id;
+                    $application->count = 1;
+                }
+                $application->save();
             return Redirect::to($url);
         } else if (Auth::user('employer')) {
             return back()->withErrors(['Restricted Operation']);

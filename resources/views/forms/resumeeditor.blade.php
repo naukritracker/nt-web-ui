@@ -1,11 +1,8 @@
-
 <div class="clearfix">
-    <div class="row">
-        {!! Form::open(["class"=>"row pad-t10 pad-b10", "id"=> "profile_form", "route" => "SaveProfile", "files"=>"true"]) !!}
-
-        <div class="clearfix">
+    <div class="row" id="hhk">
+        {!! Form::open(["class"=>"row pad-t10 pad-b10", "id"=> "profile_form", "route" => "SaveProfile", "files"=>"true"]) !!}<div class="clearfix">
             <div class="col-sm-12">
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="profile_headline">Profile Headline </label>
                     {!! Form::text('profile_headline', $userdetail->profile_headline, ['class'=>'form-control','placeholder'=>'Enter a profile headline']) !!}
                 </div>
@@ -30,9 +27,8 @@
             <a href="#" id="remove" onclick="foo()">Remove</a>
 
 
-
-
         </div>
+
 
         <div class="col-sm-9">
             <div class="form-group">
@@ -53,52 +49,79 @@
             </div>
             <div class="col-sm-6">
 
-                <label for="">Contact Number <span class="error-text">*</span></label>
+                <label for="" >Contact Number <span class="error-text">*</span></label>
                 <div class="form-group">
-                    <div class="col-xs-5">
-                        {!! Form::text('country_code', $userdetail->country_code, ['class'=>'form-control', 'placeholder'=>'+00', 'required']) !!}
+                    <div class="col-xs-5" >
+                        <input type="text" class="form-control" name="country_code" placeholder="+00"  value="{!! $userdetail->country_code !!}"  required onkeypress="return isNumber(event)"/>
                     </div>
                     <div class="col-xs-7">
-                        {!! Form::text('contact_no', $userdetail->contact_no, ['class'=>'form-control', 'placeholder'=>'0000000', 'required']) !!}
+                        <input type="text" class="form-control" name="contact_no" placeholder="+00000000"   value="{!! $userdetail->contact_no !!}" required onkeypress="return isNumber(event)"/>
                     </div>
                 </div>
             </div>
         </div>
 
+
+        <div class="clearfix">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="current_location">Country of Residence <span class="error-text">*</span></label>
+
+                    {!! Form::select('current_location', $selectlocations, $userdetail->current_location, ['placeholder'=>'Select current location', 'required', 'class'=>'form-control','id'=>'register_coun','onclick'=>'fo2();' ]) !!}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="city">State <span class="error-text">*</span></label>
+                    {!!Form::select('city',[], $userdetail->city,['placeholder'=>'Select State','class'=>'form-control','id'=>'register_stat','required'])!!}
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="industry">Industry <span class="error-text">*</span></label>
+                    {!! Form::select('industry', $selectindustry, $userdetail->industry, ['placeholder'=>'Select industry', 'class'=>'form-control', 'id'=>'industry','required']) !!}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="functional_area">Functional Area<span class="error-text">*</span> </label>
+                    {!! Form::select('functional_area', $selectfunctional, $userdetail->functional_area, ['placeholder'=>'Select functional area', 'class'=>'form-control', 'id'=>'functional_area','required']) !!}
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="role">Role </label>
+                    {!! Form::text('role',$userdetail->role, ['placeholder'=>'Select Role', 'class'=>'form-control', 'id'=>'role', 'value'=>$userdetail->role]) !!}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group"  >
+
+                    <label for="dob" >Date of Birth <span class="error-text">*</span></label>
+                    <div class="row hmar5">
+                        <div class="col-sm-4 hpad5" >
+                            {!! Form::select('dob_day', $dob_day_options, $userdetail->dob_day, ['placeholder'=>'Day', 'class'=>'form-control', 'required']) !!}
+                        </div>
+                        <div class="col-sm-4 hpad5" >
+                            {!! Form::select('dob_month', $dob_month_options, $userdetail->dob_month, ['placeholder'=>'Month', 'class'=>'form-control', 'required']) !!}
+                        </div>
+                        <div class="col-sm-4 hpad5">
+                            {!! Form::select('dob_year', $dob_year_options, $setyear, ['placeholder'=>'Year', 'class'=>'form-control', 'required']) !!}
+                        <div class="col-sm-4 hpad5" ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="clearfix">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="gender">Gender</label>
                     {!! Form::select('gender', $selectgender, $userdetail->gender, ['placeholder'=>'Select Gender', 'class'=>'form-control', 'id'=>'gender']) !!}
-                </div>
-
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <div class="form-group">
-                        <label for="">Date of Birth <span class="error-text">*</span></label>
-                        <div class="row hmar5">
-                            <div class="col-sm-4 hpad5">
-                                <label for="current_location">Day </label>
-                                {!! Form::select('dob_day', $dob_day_options, $userdetail->dob_day, ['placeholder'=>'Day', 'class'=>'form-control', 'required']) !!}
-                            </div>
-                            <div class="col-sm-4 hpad5">
-                                <label for="current_location">Month </label>
-                                {!! Form::select('dob_month', $dob_month_options, $userdetail->dob_month, ['placeholder'=>'Month', 'class'=>'form-control', 'required']) !!}
-                            </div>
-                            <div class="col-sm-4 hpad5">
-                                <label for="current_location">Year</label>
-                                {!! Form::select('dob_year', $dob_year_options, $setyear, ['placeholder'=>'Year', 'class'=>'form-control', 'required']) !!}
-                            </div>
-                        </div>
-                    </div>               </div>
-            </div>
-        </div>
-        <div class="clearfix">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label for="current_location">Current Location <span class="error-text">*</span></label>
-                    {!! Form::select('current_location', $selectlocations, $userdetail->current_location, ['placeholder'=>'Select location', 'required', 'class'=>'form-control', 'id'=>'current_location']) !!}
                 </div>
             </div>
             <div class="col-sm-6">
@@ -106,22 +129,6 @@
                     <label for="marital_status">Marital Status</label>
                     {!! Form::select('marital_status', $selectmaritalstatus, $userdetail->marital_status, ['placeholder'=>'Select status', 'class'=>'form-control', 'id'=>'marital_status']) !!}
                 </div>
-            </div>
-        </div>
-        <div class="clearfix">
-            <div class="col-sm-6">
-
-            </div>
-            <div class="col-sm-6">
-
-            </div>
-        </div>
-        <div class="clearfix">
-            <div class="col-sm-6">
-
-            </div>
-            <div class="col-sm-6">
-
             </div>
         </div>
         <div class="col-sm-12">
@@ -136,28 +143,25 @@
             </div>
         </div>
         <div class="clearfix">
+
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="city">Home Town/City <span class="error-text">*</span></label>
-                    {!! Form::text('city', $userdetail->city, ['class'=>'form-control', 'placeholder'=>'Specify your city', 'id'=>'city', 'required']) !!}
+                    <label for="preferred_location">Nationality<span class="error-text">*</span></label>
+                    {!! Form::select('preferred_location', $selectlocations, $userdetail->preferred_location, ['placeholder'=>'your nationality', 'class'=>'form-control', 'id'=>'preferred_location','required']) !!}
                 </div>
             </div>
         </div>
 
 
+
+        {!! Form::hidden('progress_percentage', 40, ['class'=>'form-control','required']) !!}
+
         <hr>
         <div class="clearfix pad-t10">
-            <button class="btn btn-primary pad-l20 pad-r20" type="submit" onclick="move()">Save</button>
+            <button class="btn btn-primary pad-l20 pad-r20" type="submit">Save</button>
             <button class="btn btn-default mar-l10" type="submit">Cancel</button>
-
         </div>
-
     </div>
-
 </div>
-</div>
-
 {!! Form::token() !!}
 {!! Form::close() !!}
-
-

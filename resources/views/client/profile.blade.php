@@ -60,6 +60,33 @@
                         </div>
                     @endif
                 </div>
+
+
+
+                <div class=" clearfix pad-t20">
+                <div class="panel panel-default ">
+                    <div class="panel-body">
+                        <p><b>Profile Completeness</b></p>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="70"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:{!!Auth::user()->userdetail->progress_percentage!!}%">
+                               {!!Auth::user()->userdetail->progress_percentage!!}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class=" clearfix pad-t10">
+                    <div class="panel panel-default ">
+                        <div class="panel-body">
+                            <p><b>Application Summary</b></p>
+                           <!-- You have applied for  <a href="{{URL::route('Myview')}}"><span class="text-info"> <b> {!!Auth::user()->userdetail->application_count!!} JOB(S)</b></span></a> -->
+                        You have applied for  <span class="text-info"> <b> {!!Auth::user()->userdetail->application_count!!} JOB(S)</b></span>
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-6">
                 <div class="tab-content">
@@ -351,7 +378,7 @@
                             {!!Form::text('role',null,['placeholder'=>'Specify role','class'=>'form-control','id'=>'role'])!!}
                         </div>
 
-
+<!--
                         <div>
                             <select id='gMonth2'>
                                 <option value=''>--Select Month--</option>
@@ -386,7 +413,8 @@
                                 <option value='11'>November</option>
                                 <option value='12'>December</option>
                             </select>
-                        </div>
+                        </div>-->
+                        {!! Form::hidden('progress_percentage', 100, ['class'=>'form-control']) !!}
                         <div class="col-xs-12 text-center">
                             <button type="submit" class="btn btn-lg btn-success" id="sub" onclick="relo();">Save Experience</button>
                         </div>
@@ -469,6 +497,36 @@
     @parent
     {!! Html::script('assets/js/jquery.validate.min.js') !!}
 
+
+    <script type="text/javascript">
+
+        function fo2() {
+            $('#register_coun').on('click change', function (event) {
+                if ($(this).val() === '') {
+                    $('#register_stat').html('<option value="" selected>Select state</option>');
+                } else {
+                    $.post('register/async/loadstatelist/' + $(this).val(), {_token: token}, function (data) {
+                        $('#register_stat').html(data);
+                    }).fail(function () {
+                        var notice = new PNotify({
+                            title: 'Error',
+                            text: 'We were unable to retrieve data from our servers. Click here to try again.',
+                            type: 'error',
+                            buttons: {
+                                closer: false,
+                                sticker: false,
+                            }
+                        });
+
+                        notice.get().click(function () {
+                            notice.remove();
+                            window.location = window.location;
+                        });
+                    });
+                }
+            });
+        }
+    </script>
     <script type="text/javascript">
         //GLOBAL REQUIREMENTS
         animationend = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -518,12 +576,22 @@
         //    window.location.reload(true);
         // }
 
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
         function foo()
         {
             document.getElementById('profile_image').src = "assets/img/userpic_large.png";
 
         }
         $(document).ready(function (){
+
+
 
             jQuery(document).ready(function() {
                 jQuery(".expand-content-link").click(function() {
@@ -541,7 +609,6 @@
                     $("#fre" + test).show();
                 });
             });
-
 
 
 
@@ -592,17 +659,28 @@
                 return this.optional(element) || (element.files[0].size <= param)
             });
 
+
+            $.validator.addMethod(
+                "maxfilesize",
+                function (value, element) {
+                    if (this.optional(element) || ! element.files || ! element.files[0]) {
+                        return true;
+                    } else {
+                        return element.files[0].size <= 300000;
+                    }
+                },
+                'The file size can not exceed 300kb.'
+            );
+            jQuery.validator.addMethod("emailordomain", function(value, element) {
+                return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+                    .test(value);
+            }, "Please specify the correct email");
+
             $.validator.addMethod("specialChars", function( value, element ) {
                 //REGEX for atleast one upper case, one lower case, one number and atleast one special character
                 var regex = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
                 return this.optional(element) || (regex.test(value));
             }, "Password must contain at least one upper case, at least one lower case, and at least one special character");
-
-
-            jQuery.validator.addMethod("emailordomain", function(value, element) {
-                return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
-                    .test(value);
-            }, "Please specify the correct email");
 
             jQuery.validator.addMethod("greaterThan",
                 function(value, element, params) {
@@ -614,6 +692,9 @@
                     return isNaN(value) && isNaN($(params).val())
                         || (Number(value) > Number($(params).val()));
                 },'please specify a valid date range.');
+
+
+
 
             //INITIAL PAGE LOAD
             $.post('profile/async/loadresumeeditor',{_token:token},function (data){
@@ -627,38 +708,38 @@
                     });
 
                     $('#profile_form').validate({
+
+
                         rules: {
 
                             contact_no: {
                                 required:true,
-                                number:true,
                                 minlength:8,
                                 maxlength:10,
                             },
-
                             load_image_field:{
+                                maxfilesize:true,
                                 filesize : 1048576,
                                 extension: "jpg|jpeg|png|gif"
                             },
-
                             email: {
                                 emailordomain: true,
                             },
-
                             country_code: {
                                 required:true,
-                                number:true,
                                 minlength:2,
                                 maxlength:5,
                             },
 
+
                             //  experience_end_date: { greaterThan: "#experience_start_date" },
                             prev_experience_end_date: { greaterThan: "#prev_experience_start_date" },
                         },
+
                         messages:{
                             email:{
                                 required:"<span class='glyphicon glyphicon-exclamation-sign' ></span>",
-                                email:"- must be valid"
+                                email:"- Please enter valid email"
                             },
                             first_name: {
                                 required:"<span class='glyphicon glyphicon-exclamation-sign' ></span>"
@@ -668,30 +749,38 @@
                             },
 
                             contact_no:{
-                                required:"<span class='glyphicon glyphicon-exclamation-sign' ></span>",
-                                number:"<span class='glyphicon glyphicon-exclamation-sign' ></span> Please enter valid Contact Number",
-                                minlength:"Min Eight(8) numbers required",
-                                maxlength:"Max Ten(10) numbers allowed"
+                                required:"Please enter contact number",
+                                minlength:"Please enter valid contact number",
+                                maxlength:"Please enter valid contact number",
+
                             },
                             city:{
-                                required:"<span class='glyphicon glyphicon-exclamation-sign' ></span>"
+                                required:"Please enter city"
                             },
-
                             country_code: {
-
-                                number:"Please enter valid country code",
-                                minlength:"Min Three(3) digits required",
-                                maxlength:"Max Five(5) digits allowed"
-
+                                required:"Please enter country code",
+                                minlength:"Please enter valid country code",
+                                maxlength:"please enter valid country code",
+                            },
+                            dob_day:{
+                                required:"Please enter  day"
+                            },
+                            dob_month:{
+                                required:"Please enter month"
                             },
                         },
                         onkeyup: function(element) {$(element).valid()},
                         errorPlacement: function(label, element) {
                             label.css('color','red');
-                            label.insertBefore(element);
+                            label.insertAfter(element);
                         },
+
+
+                      //  errorLabelContainer: "#hhk",
+
                     });
 
+                  //  $("form-group").css("color", "red");
 
 
                     //  $("#experience_end_date").rules('add', { greaterThan: "#experience_start_date" });
@@ -810,9 +899,9 @@
                             .removeAttr('checked')
                             .removeAttr('selected');
                         window.location.reload(true);
-                        // $('#my-popup').modal('hide');
+                       $('#my-popup').modal('hide');
 
-                        $('#edit-employment-details-button').trigger('click');
+                      //  $('#edit-employment-details-button').trigger('click');
                     }
                 }).fail(function (){
                     ajaxerror();
@@ -871,6 +960,8 @@
                 });
             }
         });
+
+
 
         $('#register_country').on('click change',function(event){
             if($(this).val() === ''){

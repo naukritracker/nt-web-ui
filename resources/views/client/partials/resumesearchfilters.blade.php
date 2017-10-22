@@ -1,5 +1,5 @@
 <div class="employer-search-block">
-    {!! Form::open(array('route' => 'ResumeSearch')) !!}
+    {!! Form::open(array('route' => 'ResumeSearch','id'=>'kp')) !!}
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
@@ -98,6 +98,7 @@
         </div>
         <div class="col-sm-4 mar-t25">
             <button type="submit" class="btn btn-primary btn-block">Search</button>
+
         </div>
     </div>
     <!-- Search Filter Modal -->
@@ -236,7 +237,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>Work Type</label>
+                                <label>Functional Area</label>
                                 <select name="functional_area[]" id="functional_area3" class="form-control">
                                     <option value="">Select</option>
                                     @foreach ($users as $user)

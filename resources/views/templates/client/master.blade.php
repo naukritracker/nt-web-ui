@@ -27,6 +27,8 @@
         {!! Html::style('assets/css/animate.css') !!}
         {!! Html::style('assets/css/pnotify.custom-3.min.css') !!}
         {!! Html::style('assets/css/main.css') !!}
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
 
     @show
 
@@ -76,15 +78,17 @@
                 <nav class="collapse navbar-collapse bs-navbar-collapse">
 
                     <ul class="nav navbar-nav navbar-right mar-sm-t25">
-
+                        <li >
+                            <a>Search Jobs by Country:</a>
+                        </li>
                         <li id= "togg">
-                            Search Jobs by Country:
-                            <select   id="dropdown" onchange="location=this.value;">
+
+                            <select class="form-control "  id="dropdown" onchange="location=this.value;">
                                 <option value="">Choose Country</option>
                                 <option value="/search/jobs/united-arab-emirates">UAE</option>
                                 <option value="/search/jobs/saudi-arabia" >Saudi Arabia</option>
                                 <option value="/search/jobs/oman" >Oman</option>
-                                <option value="/search/jobs/quatar" >Qatar</option>
+                                <option value="/search/jobs/qatar" >Qatar</option>
                                 <option value="/search/jobs/kuwait" >Kuwait</option>
                                 <option value="/search/jobs/bahrain" >Bahrain</option>
                                 <option value="/search/jobs/all-gulf-countries" >All Gulf Countries</option>
@@ -301,11 +305,6 @@
 
 @section('js')
 
-
-
-
-
-
     {!! Html::script('assets/js/jquery-1.11.1.min.js') !!}
     {!! Html::script('assets/js/bootstrap.min.js') !!}
     {!! Html::script('assets/js/pnotify.custom-3.min.js') !!}
@@ -332,20 +331,88 @@
 
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#searchForm #select1').change(function () {
-                if ($(this).data('options') === undefined) {
-                    /*Taking an array of all options-2 and kind of embedding it on the select1*/
-                    $(this).data('options', $('#searchForm #select2 option').clone());
-                }
-                var id = $(this).val();
-                var options = $(this).data('options').filter('[value=' + id + ']');
-                $('#searchForm #select2').html(options);
-            });
-        });
+
+function ch() {
+    $("#select1").change(function() {
+        if ($(this).data('options') === undefined) {
+            /*Taking an array of all options-2 and kind of embedding it on the select1*/
+            $(this).data('options', $('#select2 option').clone());
+        }
+        var id = $(this).val();
+        var options = $(this).data('options').filter('[value=' + id + ']');
+        $('#select2').html(options);
+    });
+}
+
     </script>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+function ch1() {
+
+
+$( function() {
+    var availableTags = [
+        "ActionScript",
+        "AppleScript",
+        "Asp",
+        "BASIC",
+        "C",
+        "C++",
+        "Clojure",
+        "COBOL",
+        "ColdFusion",
+        "Erlang",
+        "Fortran",
+        "Groovy",
+        "Haskell",
+        "Java",
+        "JavaScript",
+        "Lisp",
+        "Perl",
+        "PHP",
+        "Python",
+        "Ruby",
+        "Scala",
+        "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+        source: availableTags
+    });
+});
+
+}
+    </script>
+
+    <script src="//code.jquery.com/ui/1.11.3/jquery-ui.js"></script>
+    <script type="text/javascript">
+    function shakeForm(e) {
+
+        var x= $('#tags').val();
+        var y= $('#select1').val();
+        var z= $('#select2').val();
+        var a= $('#exp').val();
+        var b= $('#fun_area').val();
+        if ((x==null || x=="") &&(y==null || y=="")&&(z==null || z=="")&&(a==null || a=="")&&(b==null || b==""))
+        {
+            $( "#shake" ).effect( "shake" );
+
+            document.getElementById('tags').style.borderColor = "red";
+            document.getElementById('select1').style.borderColor = "red";
+            document.getElementById('select2').style.borderColor = "red";
+            document.getElementById('exp').style.borderColor = "red";
+            document.getElementById('fun_area').style.borderColor = "red";
+
+            event.preventDefault();
+        }
+
+    }
+
+
+
+</script>
+
     @if (!Auth::user())
         {!! Html::script('assets/js/jquery.validate.min.js') !!}
 

@@ -47,7 +47,7 @@
 
         <ul class="lhs-nav filter-block">
             <input type="hidden" id="searchjobsdata" value="{{URL::route('LoadSearchJobsFilterData')}}">
-            <li><a href="javascript:void(0)" >Location</a></li>               
+            <li><a href="javascript:void(0)" >Location</a></li>
              <div class="pad-l20 filter-div" id="user-box"></div>
 
             <li ><a href="javascript:void(0)" >Industry</a></li>
@@ -59,7 +59,7 @@
                   <div class="pad20">
                     <div class="filterrange"></div>
                   </div>
-                  <div class="checkbox" id="salary_range_display"></div> 
+                  <div class="checkbox" id="salary_range_display"></div>
               </div>
 
             <li><a href="javascript:void(0)">Company</a></li>
@@ -69,10 +69,10 @@
               <div class="pad-l20 filter-div" id="company-box">
                  <div class="checkbox">
                     <label>
-                      <input type="checkbox" class="walkin-check" value="1" data-id="1" id="walkin-check"> All Walk Ins 
+                      <input type="checkbox" class="walkin-check" value="1" data-id="1" id="walkin-check"> All Walk Ins
                     </label>
-                  </div>                                           
-              </div>       
+                  </div>
+              </div>
         </ul>
         <button class="btn btn-instagram"  id="k" type="reset" onclick=clicker();>Reset Filters</button>
         <!--<btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>/-->
@@ -102,16 +102,16 @@
                     <div class="row">
                       <p>
                         <!-- @if(Auth::user()) <a href="#" class="btn btn-default pull-right">Apply</a>@endif -->
-                        @if($job->walkin == 1)  
-                          <a href="javascript:void(0)" class="btn btn-sm btn-default pull-right">Walk In</a> 
+                        @if($job->walkin == 1)
+                          <a href="javascript:void(0)" class="btn btn-sm btn-default pull-right">Walk In</a>
                         @else
                           @if(Auth::user())
                             @if($job->apply != '')
-                              <a href="{{ URL::route('RegisterJobApplication',[$job->id, $job->apply]) }}" target="_blank" class="btn btn-sm btn-default pull-right">Apply Now</a>
+                              <a href="{{$job->apply}}" target="_blank" class="btn btn-sm btn-default pull-right">Apply Now</a>
                             @endif
                           @endif
-                        @endif 
-                        <a href="{{URL::route('JobDetails',array($job->id))}}" class="sm-title"> {{$job->title}} </a> 
+                        @endif
+                        <a href="{{URL::route('JobDetails',array($job->id))}}" class="sm-title"> {{$job->title}} </a>
                       </p>
                       <p class="xs-title lj-icons">
                           @if($job->industry)
@@ -122,9 +122,9 @@
                               <span>{{$job->state->state}} / {{$job->country->country}}</span>
                           @endif
 
-                          @if($job->updated_at)
-                              <span>{{$job->updated_at->diffForHumans()}}</span>                            
-                          @endif                            
+                          @if($job->created_at)
+                              <span>{{$job->created_at->diffForHumans()}}</span>
+                          @endif
                       </p>
                       <div class="lj-description" id="jobdescription_{{$job->id}}">
                         <p>{{$job->short_description}}</p>
@@ -140,7 +140,7 @@
                             <span class="col-xs-3" title="Role Specified"><i class="fa fa-user"></i> {{$job->role}}</span>
                         @endif
                         @if($job->visa != '' && $job->visa != 0)
-                            <span class="col-xs-3" title="Visa Type"><i class="fa fa-certificate"></i> 
+                            <span class="col-xs-3" title="Visa Type"><i class="fa fa-certificate"></i>
                             <?php
                               $visaNamesArray = array();
                               $visaArray = explode('||',$job->visa);
@@ -150,8 +150,8 @@
                             ?>
                             {{implode(',',$visaNamesArray)}}</span>
                         @endif
-                        @if(strtotime($job->updated_at) > 0)
-                            <span class="col-xs-3" title="Last Updated"><i class="fa fa-clock-o"></i> {{$job->updated_at->diffForHumans()}}</span>
+                        @if(strtotime($job->created_at) > 0)
+                            <span class="col-xs-3" title="Last Updated"><i class="fa fa-clock-o"></i> {{$job->created_at->diffForHumans()}}</span>
                         @endif
                         </div>
 
@@ -177,21 +177,21 @@
                           <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
                           <!-- AddToAny END -->
                         </div>
-                        
+
                         <p><br><a href="javascript:void(0)" class="label label-warning jobhiding" data-hide="{{$job->id}}">Hide Details <i class="fa fa-caret-up"></i></a></p>
 
                       </div>
                     </div>
                 </li>
                 @endforeach
-                                                                                                                                     
-            </ul> 
+
+            </ul>
             </div>
             <div class="clearfix"></div>
             <div class="row">
-              {!! $data['jobs']->appends(['location_list' => isset($location_list) ? $location_list : '','industry_list' => isset($industry_list) ? $industry_list : '','salary_range' => isset($salary_range) ? $salary_range : '','salary_start' => isset($salary_start) ? $salary_start : '','salary_end' => isset($salary_end) ? $salary_end : '','company_list' => isset($company_list) ? $company_list : '','order' => isset($order) ? $order : '','walkin' => isset($walkin) ? $walkin : ''])->render() !!} 
+              {!! $data['jobs']->appends(['location_list' => isset($location_list) ? $location_list : '','industry_list' => isset($industry_list) ? $industry_list : '','salary_range' => isset($salary_range) ? $salary_range : '','salary_start' => isset($salary_start) ? $salary_start : '','salary_end' => isset($salary_end) ? $salary_end : '','company_list' => isset($company_list) ? $company_list : '','order' => isset($order) ? $order : '','walkin' => isset($walkin) ? $walkin : ''])->render() !!}
             </div>
-                        
+
             @else
             <div class="clearfix  animated rotateInUpLeft">
               <h3 class="mar-t10 mar-b15 error-text"><i class="fa fa-times-circle-o"></i>  No jobs listed at present</h3>
@@ -199,11 +199,11 @@
               <p><i>Thank You for your patience</i></p>
               <p><i>Sincerely</i></p>
               <p><i><b>Naukri Tracker</b></i></p>
-              
+
             </div>
             @endif
     </div>
-                              
+
   </div>
 </div>
 
@@ -216,12 +216,6 @@
   {!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui.min.js') !!}
 	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
 	<script type="text/javascript">
-
-
-
-
-
-
   // Accordian
   function clicker()
   {
@@ -231,7 +225,7 @@
         var action="click";
         var speed="500";
          //GLOBAL REQUIREMENTS
-        var token = $('meta[name="csrf-token"]').attr('content'); 
+        var token = $('meta[name="csrf-token"]').attr('content');
         var animationend = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         var pageloading = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><i class="fa fa-circle-o-notch fa-spin green"></i><i class="fa fa-circle-o-notch fa-spin red"></i><i class="fa fa-circle-o-notch fa-spin blue"></i></div></div>';
         var reloadbutton = '<div class="clearfix"><div class="clearfix pad-t40pr pad-l50pr"><button class="btn btn-lg btn-danger" onclick="window.location=window.location;">Reload Page</button></div></div>';
@@ -420,7 +414,7 @@
 
     $(document).ready(function(){
 
-        // Question handler               
+        // Question handler
         $('.filter-block li').on(action ,function(){
             // Get next element
             $(this).next()
@@ -465,7 +459,7 @@
         ]
       });
 
-        
+
         $.post($('#searchjobsdata').val(),{_token:token},function (data){
           if(data === -1){
             ajaxerrorclicktoclose();
@@ -493,7 +487,7 @@
             });
 
             $('#company-box').html(data.companies);
-            
+
             $('.company-list').change(function (event){
               if($(this).is(":checked")){
                 addto($(this).attr('data-id'),'#company_list');
@@ -553,7 +547,7 @@
 
             }
           }
-          
+
             reintializefilters();
           }
         });
@@ -561,18 +555,18 @@
 
       $('.joblisting').click(function(event){
         var jobid = $(this).prop('id');
-        $('#jobdescription_'+jobid).hide(500);   
+        $('#jobdescription_'+jobid).hide(500);
         $('#jobdetails_'+jobid).show(500);
       });
 
       $('.jobhiding').click(function(event){
         var jobid = $(this).attr('data-hide');
-        $('#jobdescription_'+jobid).show(500);   
+        $('#jobdescription_'+jobid).show(500);
         $('#jobdetails_'+jobid).hide(500);
       });
 
-    }); 
+    });
 
-        
+
 	</script>
 @stop

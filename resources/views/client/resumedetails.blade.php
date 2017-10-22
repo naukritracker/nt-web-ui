@@ -27,7 +27,7 @@
                     </p>
                     <p class="mar-b0 pad-t5">Profile Status</p>
                     <p class="xs-title">Unspecified</p>   
-                    <!--<p class="v-success">Verified Profile</p>                             -->
+                    <!--<p class="v-success">Verified Profile</p>-->
                 </div>  
                 <div class="col-sm-3 lr-brd">                
                     <p class="mar-b0 pad-t20">Email Address</p>
@@ -159,7 +159,7 @@
                                     {{ date('F d, Y', $user->userdetail->pg_start_date) }} - {{ date('F d, Y', $user->userdetail->pg_end_date) }}
                                 </p>
                             @endif
-                        @elseif(isset($user->userdetail->ug_institution) and $user->userdetail->ug_institution != '')
+                        @elseif(isset($user->userdetail->ug_institute))
                             <p class="mar-b0 primary-sm-title">{{ $user->userdetail->ug_institution }}</p>
                             @if(isset($user->userdetail->ug_type) and $user->userdetail->ug_type != '')
                                 <p class="mar-b5">{{ $user->userdetail->ug_type }}</p>

@@ -9,6 +9,7 @@ use App\Models\EmployerUserDetails;
 use Auth;
 use Hash;
 use Validator;
+use Mail;
 use App\User;
 use App\Models\UserDetail;
 use App\Role;
@@ -176,18 +177,19 @@ class RegisterController extends Controller
         $candidate = Role::where('name', 'candidate')->first();
         $newuser->attachRole($candidate);
         $newuser->save();
-//        Mail::send(
-//            'emails.confirmregistration',
-//            ['link' => route('ConfirmRegistration', ['email'=>$newuser->email,'code'=>$confirmation_code])],
-//            function ($m) use ($newuser) {
-//                $m->from(
-//                    env('DEFAULT_MAIL_ID', 'no-reply@naukritracker.com'),
-//                    env('APP_NAME', 'Naukri Tracker')
-//                );
-//                $m->to($newuser->email, $newuser->name)->subject('Welcome to naukritracker !');
-//            }
-//        );
 
+       
+        Mail::send(
+           'emails.confirmregistration',
+            ['link' => route('ConfirmRegistration', ['email'=>$newuser->email,'code'=>$confirmation_code])],
+            function ($m) use ($newuser) {
+                $m->from(
+                   'no-reply@naukritracker.com'
+                    , 'Naukri Tracker'               );
+                $m->to($newuser->email, $newuser->name)->subject('Welcome to naukritracker !');
+            }
+       );
+	   	   	  
         if ($request->ajax()) {
             $request->session()->flash(
                 'success',

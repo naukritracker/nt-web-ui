@@ -13,6 +13,8 @@ use URL;
 use Validator;
 use Hash;
 use App\User;
+use App\Models\JobPosting;
+use App\Models\JobPostingHasApplication;
 use App\Models\Company;
 use App\Models\Country;
 use App\Models\Experience;
@@ -32,6 +34,15 @@ class ProfileController extends Controller
      * @param  Request  $request
      * @return Response
      */
+
+    public function show(Request $request)
+    {
+        $user = Auth::user();
+        $ud=UserDetail::where('user_id', $user->id)->first();
+        $jobs1 = JobPostingHasApplication::where('user_id',$ud->user_id)->first();
+        $jobs=JobPosting::where('id',$jobs1->jobposting_id )->paginate(10);
+        return view('client.myview')->with('jobs', $jobs);
+    }
     public function showProfile(Request $request)
     {
 
@@ -334,6 +345,7 @@ class ProfileController extends Controller
 
         if ($request->ajax()) {
 
+
             $form = $formbuilder->build('SaveProfile');
             return $form;
         } else {
@@ -536,11 +548,16 @@ class ProfileController extends Controller
             'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
             'first_name' => 'required',
             'last_name' => 'required',
-            'city' => 'required',
+           //'city' => 'required',
             'load_image_field' => 'mimes:jpg,png,jpeg,gif|max:12000',
         ]);
         try{
+
+
             $user = User::find(Auth::user()->id);
+
+
+
             $user->email = $request->get('email');
             $user->userdetail->first_name = $request->get('first_name');
             $user->userdetail->last_name = $request->get('last_name');
@@ -549,10 +566,10 @@ class ProfileController extends Controller
             $user->userdetail->contact_no = $request->get('contact_no');
             $user->userdetail->country_code = $request->get('country_code');
             $user->userdetail->current_location = $request->get('current_location');
-          //  $user->userdetail->preferred_location = $request->get('preferred_location');
-          //  $user->userdetail->industry = $request->get('industry');
-           // $user->userdetail->functional_area = $request->get('functional_area');
-          //  $user->userdetail->role = $request->get('role');
+            $user->userdetail->preferred_location = $request->get('preferred_location');
+            $user->userdetail->industry = $request->get('industry');
+            $user->userdetail->functional_area = $request->get('functional_area');
+            $user->userdetail->role = $request->get('role');
             $user->userdetail->dob_day = $request->get('dob_day');
             $user->userdetail->dob_month = $request->get('dob_month');
             $user->userdetail->dob_year = $request->get('dob_year');
@@ -560,6 +577,11 @@ class ProfileController extends Controller
             $user->userdetail->marital_status = $request->get('marital_status');
             $user->userdetail->permanent_address = $request->get('permanent_address');
             $user->userdetail->city = $request->get('city');
+            if( ($user->userdetail->progress_percentage!=100)and($user->userdetail->progress_percentage!=70))
+            {
+                $user->userdetail->progress_percentage = $request->get('progress_percentage');
+            }
+            $user->userdetail->nationality = $request->get('nation');
             if($request->hasFile('load_image_field')){
                 $imageName = $user->userdetail->id . '.' . $request->file('load_image_field')->getClientOriginalExtension();
                 try{
@@ -578,6 +600,8 @@ class ProfileController extends Controller
             }
 
             $user->push();
+
+
 
             return redirect()->route('Profile',['#page=profileform']);
         }catch(Exception $e){
@@ -811,11 +835,11 @@ class ProfileController extends Controller
 
 
                         if ($exp->functional_area) {
-/*
-                            $html .= '<div class="col-sm-6">
+
+                         /*   $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="functional_area">Functional area</label>
-                            <p>'.$exp->functional_area;'</p>
+                            <p>'.$exp->functional_area.'</p>
                             </div>
                             </div>';*/
                         }
@@ -862,7 +886,7 @@ class ProfileController extends Controller
                     'experience_end_date' => 'required'
                 ]);
 
-            $validator->after(function ($validator) use ($request) {
+          /*  $validator->after(function ($validator) use ($request) {
                 $company_id = $request->get('company');
                 $start_date = $request->get('experience_start_date');
                 $end_date = $request->get('experience_end_date');
@@ -882,7 +906,7 @@ class ProfileController extends Controller
                     $validator->errors()->add('company', 'This time period has already been filled once');
                     $this->formerrorcode = -3;
                 }
-            });
+            });*/
 
             if ($validator->fails()) {
                 return $this->formerrorcode;
@@ -892,6 +916,9 @@ class ProfileController extends Controller
 
 
                 if ($request->get('company') != 0) {
+
+
+
                     $exp = new Experience;
                     $company = Company::find($request->get('company'));
 
@@ -910,8 +937,19 @@ class ProfileController extends Controller
                    // $exp->total_experience = $carbonEnd->diffInYears($carbonStart);
                     $exp->designation = $request->get('designation');
                     $exp->prev_company = $request->get('previous_company');
-                    $exp->prev_start_date = $request->get('prev_experience_start_date');
-                   $exp->prev_end_date = $request->get('prev_experience_end_date');
+                    if($request->get('prev_experience_start_date')!=NULL)
+                    {
+                        $exp->prev_start_date = $request->get('prev_experience_start_date');
+                        $exp->prev_end_date = $request->get('prev_experience_end_date');
+
+                    }
+                    else
+                    {
+                        $exp->prev_start_date = '0000-00-00 00:00:00';
+                        $exp->prev_end_date ='0000-00-00 00:00:00';
+
+                    }
+
                   //  $exp->prev_start_month = $request->get('prev_start_month');
                   // $exp->prev_start_year = $request->get('prev_start_year');
                   // $exp->prev_end_month = $request->get('prev_end_month');
@@ -929,9 +967,12 @@ class ProfileController extends Controller
                     $exp->role = $request->get('role');
                     $exp->save();
 
+                    $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
+                    $userdetails->progress_percentage = $request->get('progress_percentage');
+                    $userdetails->save();
+
 
                 }
-
 
                return 1;
             }
@@ -976,6 +1017,7 @@ class ProfileController extends Controller
 
    public function saveEducationDetails(Request $request){
         $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
+
 
        // $userdetails->sse_institution = $request->get('10_educational_institute_name');
         //$userdetails->sse_start_date = $request->get('10_education_start_date');
@@ -1022,7 +1064,10 @@ class ProfileController extends Controller
        $userdetails->certification_year = $request->get('certification_year');
        $userdetails->ug_year = $request->get('ug_year');
 
-
+       if($userdetails->progress_percentage!=100)
+       {
+           $userdetails->progress_percentage = $request->get('progress_percentage');
+       }
 
         $userdetails->save();
 

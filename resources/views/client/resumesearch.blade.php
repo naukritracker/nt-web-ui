@@ -26,6 +26,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="navbar-right">
+                            <div class="navbar-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-sm">
                                         Save Search

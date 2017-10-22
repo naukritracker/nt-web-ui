@@ -139,7 +139,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Specialization </label>
-                        {!!Form::text('pg_specialization',Auth::user()->userdetail->pg_specialization,['placeholder'=>'Enter Your Specialization','class'=>'form-control'])!!}
+                        {!!Form::text('pg_specialization',Auth::user()->userdetail->pg_specialization,['placeholder'=>'Your Specialization','class'=>'form-control'])!!}
                     </div>
                 </div>
             </div>
@@ -198,6 +198,8 @@
         </div>
     </div>
 </div>
+
+{!! Form::hidden('progress_percentage', 70, ['class'=>'form-control','required']) !!}
 
 <div class="col-xs-12 text-center pad-t40">
     <div class="form-group">
