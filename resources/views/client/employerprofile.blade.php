@@ -11,7 +11,7 @@
                     @else
                         {!! Html::image('assets/img/userpic_large.png', null, ['class'=>'img-responsive','id'=>'profile_image']) !!}
                     @endif
-                    </a> -->
+                    </a>-->
                     {!! Form::open(array('route' => 'SaveEmployerPhoto', 'id' => 'employer-photo-form','enctype' => 'multipart/form-data')) !!}
                     <div style="visibility:hidden">
                         {!! Form::file('employerPhoto', array('id' => 'employer-photo-input')) !!}
@@ -22,11 +22,16 @@
                     <h3 class="title-blue">
                         {!! Auth::user("employer")->employer->name !!}
                     </h3>
+                    <p class="mar-b0 pad-t10">Address</p>
                     @if (isset(Auth::user("employer")->employer->address)
                         and Auth::user("employer")->employer->address != "")
-                        <p class="mar-b0 pad-t10">Address</p>
+
                         <p class="xs-title">
                             {!! Auth::user("employer")->employer->address !!}
+                        </p>
+                        @else
+                        <p class="xs-title">
+                        NO Address Specified
                         </p>
                     @endif
                 </div>
@@ -62,7 +67,7 @@
                 <h3 class="m-title b-title">
                     Applied Profiles
                     @if(count(Auth::user('employer')->jobs))
-                        - <a href="{{ URL::route('EmployerViewAllApplicants') }}" class="viewall-btn">View All</a>
+                        -  <a href="{{ URL::route('EmployerViewAllApplicants') }}" class="viewall-btn">View All</a> 
                     @endif
                 </h3>
                 <div class="row">
@@ -72,11 +77,11 @@
                         <?php if ($applicantCount < 10) { ?>
                             <div class="col-sm-4">
                                 <div class="profile-card">
-                                    <h4><a href="#">{{ $job->user->name }}</a></h4>
+                                    <h4><a href="#">{{ $job->user_id }}</a></h4>
                                     @if(isset($job->user->userdetail->role) and $job->user->userdetail->role != '')
                                     <p>{{ $job->user->userdetail->role }}</p>
                                     @endif
-                                    <a href="{{URL::route('ShowResumeDetails',[$job->user->id])}}">
+                                    <a href="{{URL::route('ShowResumeDetails',[$job->id])}}">
                                         <button type="button" class="btn view-profile-btn">View Profile</button>
                                     </a>
                                 </div>
@@ -144,6 +149,7 @@
 
 
                     $('#togg').hide();
+            $('#togg2').hide();
 
 
             $('#search-for-resumes').click(function (clickEvent) {

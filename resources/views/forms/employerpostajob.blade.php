@@ -150,29 +150,108 @@
                 @endif
             </div>
         </div>
-
+<div>
         <div class="col-sm-12">
             <div class="form-group">
                 @if($job)
-                    {!! Form::select('country_id', $selectcountry, $job->country_id, ['placeholder'=>'Select job user', 'class'=>'form-control','id' => 'country_id','required'])  !!}
+					
+				
+				<select class="form-control" name="country_id" id="country_id"  >
+                                <option value="ChooseCountry" selected>Choose Country</option>
+                                <option value="UAE">UAE</option>
+                                <option value="SaudiArabia" >Saudi Arabia</option>
+                                <option value="Oman" >Oman</option>
+                                <option value="Qatar" >Qatar</option>
+                                <option value="Kuwait" >Kuwait</option>
+                                <option value="Bahrain" >Bahrain</option>
+                              
+                            </select>
+                    
                 @else
-                    {!! Form::select('country_id', $selectcountry, null, ['placeholder'=>'Select job user', 'class'=>'form-control','id' => 'country_id','required'])  !!}
+                    <select class="form-control" name="country_id" id="aa"  >
+                                <option value="ChooseCountry" selected>Select Country</option>
+                                <option value="UAE">UAE</option>
+                                <option value="SaudiArabia" >Saudi Arabia</option>
+                                <option value="Oman" >Oman</option>
+                                <option value="Qatar" >Qatar</option>
+                                <option value="Kuwait" >Kuwait</option>
+                                <option value="Bahrain" >Bahrain</option>
+                              
+                            </select>
                 @endif
             </div>
         </div>
 
         <div class="col-sm-12">
             <div class="form-group">
-                {!! Form::select('state_id', $selectstate, null, ['placeholder'=>'Select specific job user', 'class'=>'form-control','id' => 'state_id','required']) !!}
+			
+			<select   name="state_id" placeholder=" Select city/state" class="form-control" id="bb">
+  </select>
+                
             </div>
         </div>
 
         <div class="col-sm-12">
             <div class="form-group">
-                {!! Form::select('visa[]', [], null, ['placeholder'=>'Select one or multiple visa(s)', 'class'=>'form-control','id'=>'visa_id' ,'required','multiple']) !!}
+			<select id="cc"  name="visa[]" placeholder="Select visa" class="form-control" >
+  </select>
+                
             </div>
         </div>
+<script>
+		var cityMapping = {
+  ChooseCountry:["City"],	
+  UAE: ["Abu Dhabi", "Ajman", "Dubai","Fujairah","Sharjah","Umm Al Qaiwain"],
+  SaudiArabia: ["Riyadh", "Jeddah", "Mecca","Al Madinah","Al-Ahsa","Ta'if","Dammam/Khobar","Buraidah","Tabuk"],
+  Oman: ["Muscat", "Zufar"],
+  Qatar: ["Doha"],
+  Kuwait: ["Al Ahmadi", "Al Farwaniyah", "Al Jahra","Kuwait City","Hawally"],
+  Bahrain: ["Manama"]
+}	
 
+
+var visaMapping = {
+  ChooseCountry:["Visa"],
+  UAE: ["Employment Visa", "Employment Visa - Cancelled", "Family Sponsorship Visa","Long Term Visit - 90days","Tourist Visa - 30days","Mission Visa"],
+  SaudiArabia: ["Business Visa - 180 Days", "Employment Visa - Transferable", "Employment Visa - Non-Transferable","Family Sponsorship Visa"],
+  Oman: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Qatar: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Kuwait: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Bahrain: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"]
+}		
+	
+	$('#aa').change(function() {
+  // get the second dropdown
+  $('#bb').html(
+      // get array by the selected value
+      cityMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+  
+  $('#cc').html(
+      // get array by the selected value
+      visaMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+    // trigger change event to generate second select tag initially
+}).change()
+</script>
+
+</div>
         <div class="col-xs-12 text-center">
             <div class="form-group">
                 @if($job)
@@ -270,3 +349,5 @@
 
 {!! Form::token() !!}
 {!! Form::close() !!}
+
+

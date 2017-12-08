@@ -117,7 +117,7 @@
 
 
         jQuery.validator.addMethod("NoSpecialChars", function(value, element) {
-                var re = new RegExp("^[a-zA-Z'.\\s]{1,40}$");
+                var re = new RegExp("^[a-zA-Z0-9_.]*$");
                 return this.optional(element) || re.test(value);
             },
             "Please check your input."

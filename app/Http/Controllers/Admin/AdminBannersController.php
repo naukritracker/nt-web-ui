@@ -11,7 +11,7 @@ class AdminBannersController extends Controller
 {
     public function showBanners()
     {
-        $data['banners'] = Banner::orderBy('id', 'desc')->paginate(15);
+        $data['banners'] = Banner::orderBy('id', 'desc')->paginate(50);
         return view('admin.banners.view')->with('data', $data);
     }
 

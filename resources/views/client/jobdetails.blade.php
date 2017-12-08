@@ -3,7 +3,7 @@
 @section('meta')
     @parent
     <meta name="keywords" content="Naukri Tracker - Job search :: {{$data['job']->title}} ({{$data['job']->short_description}})">
-    <meta name="description" content="Naukri Tracker, Located in {{$data['job']->state->state}} ({{$data['job']->country->country}}), {{$data['job']->description}}, Job search results for your dream job">
+    <meta name="description" content="Naukri Tracker, Located in {{$data['job']->state}} ({{$data['job']->country}}), {{$data['job']->description}}, Job search results for your dream job"> -->
     <meta name="robots" content="index/nofollow">
 @stop
 

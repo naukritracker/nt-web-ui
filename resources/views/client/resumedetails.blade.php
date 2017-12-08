@@ -26,10 +26,10 @@
                         @endif
                     </p>
                     <p class="mar-b0 pad-t5">Profile Status</p>
-                    <p class="xs-title">Unspecified</p>   
+                    <p class="xs-title">Unspecified</p>
                     <!--<p class="v-success">Verified Profile</p>-->
-                </div>  
-                <div class="col-sm-3 lr-brd">                
+                </div>
+                <div class="col-sm-3 lr-brd">
                     <p class="mar-b0 pad-t20">Email Address</p>
                     <p class="xs-title">{{ $user->email }}</p>
                     @if(isset($user->userdetail->contact_no) and $user->userdetail->contact_no != '')
@@ -38,14 +38,14 @@
                     @endif
                     <p class="mar-b0 pad-t10">Address</p>
                     @if(isset($user->userdetail->permanent_address) and $user->userdetail->permanent_address != '')
-                        <p class="xs-title">{{ $user->userdetail->permanent_address }}</p>    
+                        <p class="xs-title">{{ $user->userdetail->permanent_address }}</p>
                     @else
-                        <p class="xs-title">No address specified</p>    
-                    @endif                              
-                </div>  
+                        <p class="xs-title">No address specified</p>
+                    @endif
+                </div>
                 <div class="col-sm-4 pad-t20 emp-db-top-rhs">
                     <div class="green-box clearfix mar-t10">
-                        <span class="upload-icon"></span> 
+                    <!-- &nbsp;   <span class="glyphicon glyphicon-upload"></span>-->
                         @if($user->userdetail->media and $user->userdetail->media->content != '')
                         <span href="#" class="pad-b5 pull-left sm-title">{{ $user->userdetail->media->content }}</span>
                         <p class="mar-b0">
@@ -55,10 +55,10 @@
                         </p>
                         @else
                         <span href="#" class="pad-b5 pull-left sm-title">No Resume Uploaded</span>
-                        @endif                   
+                        @endif
                     </div>
                     <!--<button type="button" class="btn big-btn blue-btn">View Complete Profile</button>-->
-                </div>                      
+                </div>
             </div>
         </div>
     </section>
@@ -85,30 +85,34 @@
             </div>
             <div class="col-sm-6">
                 <div class="clearfix">
-                    <p class="gray-text">No description field available at present</p>            
+                    <p class="gray-text">No description field available at present</p>
                     <hr>
                 </div>
                 <div class="clearfix">
-                    @if(isset($user->experience))
-                        <?php $expCount = 1; ?>
-                        @foreach($user->experience as $exp)
-                        <?php if ($expCount < 3) { ?>
+                   
+                       
+                       
+                       
                         <div class="clearfix">
-                            <p class="mar-b0 primary-sm-title">{{ $exp->company->name }}</p>
+                            <h4 class="title-blue pad-t10"><b>Experience Details</b></h4>
+                            <br>
+							@if(isset($user->userdetail->current_employer))
+                            <p class="mar-b0 primary-sm-title"><b>Current Employer:</b> {{ $user->userdetail->current_employer }}</p>
+ @endif
                             <p class="mar-b5">
-                                @if(isset($exp->company->industries))
-                                   {{ $exp->company->industries->industry }}
-                                @elseif(isset($exp->company->functionalareas))
-                                    {{ $exp->company->industries->functionalareas->functional_area }}
-                                @elseif(isset($exp->company->role) and $exp->company->role != '')
-                                    {{ $exp->company->role }}
+                                @if(isset($user->userdetail->emp_industry))
+                                    <b>Industry:</b> {{$user->userdetail->industries->industry }}
+                                @elseif(isset($user->userdetail->functional_area))
+                                    {{ $user->userdetail->functionalareas->functional_area }}
+                                @elseif(isset($user->userdetail->role) )
+                                    {{ $user->userdetail->role }}
                                 @else
                                     No speciality specified
                                 @endif
                             </p>
                             <p class="xs-title">
-                                @if(isset($exp->company->start_date) and $exp->company->start_date != '')
-                                    {{ date('F d, Y', $exp->company->start_date) }} 
+                                @if(isset($user->userdetail->c_f_month) and $user->userdetail->start_date != '')
+                                    {{ $exp->start_date->formatLocalized(' %d %B %Y') }}
                                     @if(isset($exp->company->end_date) and $exp->company->end_date != '')
                                         - {{ date('F d, Y', $exp->company->end_date) }}
                                     @else
@@ -117,23 +121,41 @@
                                 @else
                                     Duration not specified
                                 @endif
-                                 | 
+                                 |
                                 @if(isset($exp->state))
                                     {{ $exp->state->state }}({{ $exp->state->country->country }})
                                 @endif
+
                             </p>
+                            @if(isset($user->userdetail->total_years))
+                                <b>Total Experience:</b>  {{ $user->userdetail ->total_years }} years
+                            @endif
                         </div>
-                        <?php $expCount++; } else { break; } ?>
-                        @endforeach
-                    @endif
-                    <hr>             
+                       
+                        
+                  
+                    <hr>
                 </div>
                 <div class="clearfix">
+
                     <div class="clearfix">
-                        @if(isset($user->userdetail->other_institution) and $user->userdetail->other_institution != '')
-                            <p class="mar-b0 primary-sm-title">{{ $user->userdetail->other_institution }}</p>
-                            @if(isset($user->userdetail->other_type) and $user->userdetail->other_type != '')
-                                <p class="mar-b5">{{ $user->userdetail->other_type }}</p>
+
+                        @if(isset($user->userdetail->graduation) and $user->userdetail->graduation != '')
+                           <h4 class="title-blue pad-t10"><b>Education Details</b></h4>
+                        <br>
+
+                            <p class="mar-b0 primary-sm-title"><b>Graduation:</b> {{ $user->userdetail->graduation }}</p>
+                            @if(isset($user->userdetail->ug_specialization) and $user->userdetail->ug_specialization != '')
+
+                                <p class="mar-b5"> <b>Specialization:</b> {{ $user->userdetail->ug_specialization }}</p>
+                            @endif
+                            @if(isset($user->userdetail->ug_institute) and ($user->userdetail->ug_institute) != '')
+
+                                <p class="mar-b5"> <b>Institution:</b> {{ $user->userdetail->ug_institute }}</p>
+                            @endif
+                            @if(isset($user->userdetail->ug_year) and ($user->userdetail->ug_year) != '')
+
+                                <p class="mar-b5"> <b>Passing Year:</b> {{ $user->userdetail->ug_year }}</p>
                             @endif
                             @if(isset($user->userdetail->other_start_date) and $user->userdetail->other_start_date != ''
                                 and isset($user->userdetail->other_end_date) and $user->userdetail->other_end_date != ''
@@ -147,10 +169,26 @@
                         @endif
                     </div>
                     <div class="clearfix pad-t15">
-                        @if(isset($user->userdetail->pg_institution) and $user->userdetail->pg_institution != '')
-                            <p class="mar-b0 primary-sm-title">{{ $user->userdetail->pg_institution }}</p>
-                            @if(isset($user->userdetail->pg_type) and $user->userdetail->pg_type != '')
-                                <p class="mar-b5">{{ $user->userdetail->pg_type }}</p>
+
+                        @if(isset($user->userdetail->post_graduation) and $user->userdetail->post_graduation != '')
+
+                            <p class="mar-b0 primary-sm-title"> <b>Post-Graduation:</b> {{ $user->userdetail->post_graduation }}</p>
+                            @if(isset($user->userdetail->pg_specialization) and $user->userdetail->pg_specialization != '')
+
+                                <p class="mar-b5"> <b>Specialization:</b> {{ $user->userdetail->pg_specialization }}</p>
+                            @endif
+                            @if(isset($user->userdetail->pg_institute) and $user->userdetail->pg_institute != '')
+
+                                <p class="mar-b5"><b>Institution:</b> {{ $user->userdetail->pg_institute }}</p>
+                            @endif
+                            @if(isset($user->userdetail->pg_year) and $user->userdetail->pg_year != '')
+
+                                <p class="mar-b5"><b>Passing Year:</b> {{ $user->userdetail->pg_year }}</p>
+                            @endif
+                            @if(isset($user->userdetail->certification_name) and $user->userdetail->certification_name != '')
+                                <br>
+
+                                <p class="mar-b5"><b>Certification:</b> {{ $user->userdetail->certification_name }}</p>
                             @endif
                             @if(isset($user->userdetail->pg_start_date) and $user->userdetail->pg_start_date != ''
                                 and isset($user->userdetail->pg_end_date) and $user->userdetail->pg_end_date != ''
@@ -199,7 +237,7 @@
                             No basic education details available
                         @endif
                     </div>
-                    <hr>    
+                    <hr>
                     <div class="clearfix pad-t15">
                         @if(isset($user->userdetail->media))
                             @if($user->userdetail->media->content != "")
@@ -235,10 +273,10 @@
                                 </script>
                             @endif
                         @endif
-                    </div>         
-                </div>               
+                    </div>
+                </div>
             </div>
-            
+
             <div class="col-sm-3">
                 <ul class="l-jobs r-jobs">
                     <li>
@@ -248,7 +286,7 @@
                         @else
                             <p class="primary-sm-title">No industry specified</p>
                         @endif
-                    </li>  
+                    </li>
                     <li>
                         <p class="mar-b0">Functional Area</p>
                         @if(isset($user->userdetail->functionalareas))
@@ -256,7 +294,7 @@
                         @else
                             <p class="primary-sm-title">No functional area specified</p>
                         @endif
-                    </li> 
+                    </li>
                     <li>
                         <p class="mar-b0">Preferred Location</p>
                         @if(isset($user->userdetail->preferredlocation))
@@ -264,9 +302,9 @@
                         @else
                             <p class="primary-sm-title">No preferred area specified</p>
                         @endif
-                    </li>                               
+                    </li>
                 </ul>
-                <h4 class="title-blue pad-t10">Personal Details</h4>                                
+                <h4 class="title-blue pad-t10">Personal Details</h4>
                 <ul class="l-jobs r-jobs">
                     <li>
                         <p class="mar-b0">Date of Birth</p>
@@ -275,13 +313,13 @@
                                 and isset($user->userdetail->dob_month) and $user->userdetail->dob_month != ''
                                 and isset($user->userdetail->dob_year) and $user->userdetail->dob_year != ''
                             )
-                                {{ date('F', $user->userdetail->dob_month) }} {{ date('d', $user->userdetail->dob_day) }}, 
+                                {{ date('F', $user->userdetail->dob_month) }} {{ date('d', $user->userdetail->dob_day) }},
                                 {{ date('Y', $user->userdetail->dob_year) }}
                             @else
                                 No DOB specified
                             @endif
                         </p>
-                    </li> 
+                    </li>
                     <li>
                         <p class="mar-b0">Age</p>
                         <p class="primary-sm-title">
@@ -290,14 +328,14 @@
                                 and isset($user->userdetail->dob_year) and $user->userdetail->dob_year != ''
                             )
                                 {{ date_diff(
-                                    date_create(''.$user->userdetail->dob_year.'-'.$user->userdetail->dob_month.'-'.$user->userdetail->dob_day.''), 
+                                    date_create(''.$user->userdetail->dob_year.'-'.$user->userdetail->dob_month.'-'.$user->userdetail->dob_day.''),
                                     date_create('today')
-                                )->y }}
+                                )->y }} years
                             @else
                                 No age specified
                             @endif
                         </p>
-                    </li> 
+                    </li>
                     <li>
                         <p class="mar-b0">Marital Status</p>
                         <p class="primary-sm-title">
@@ -307,23 +345,28 @@
                                 Not specified
                             @endif
                         </p>
-                    </li>                                                               
+                    </li>
                 </ul>
                 <div class="clearfix pad-t20 mar-t30 mar-b30">
                     <div class="light-gray-box">
-                        <p class="pad-b10">Find Profiles matching 
+                        <p class="pad-b10">Find Profiles matching
         your requiremnts</p>
                         <a href="{{ URL::route('ResumeSearch') }}"><button class="btn big-btn green-btn btn-block">Search Profiles</button></a>
                     </div>
-                </div>               
-            </div>                 
+                </div>
+            </div>
         </div>
     </div>
 @stop
 
 @section('js')
 @parent
+
+
 <script type="text/javascript">
+
+$('#togg').hide();
+$('#togg2').hide();
 	function engageOverhang() {
 	    $('.overhang').fadeIn(100).show();
 

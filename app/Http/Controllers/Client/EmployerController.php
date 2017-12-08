@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Client;
-
+use App\Models\JobPostingHasApplication;
 use Auth;
 use App\Helpers\FormBuilder\FormBuilder;
 use App\Http\Controllers\Controller;

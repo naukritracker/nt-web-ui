@@ -10,7 +10,7 @@ class AdminUserController extends Controller
 {
     public function showUsers()
     {
-        $data['users'] = User::orderBy('id', 'DESC')->paginate(15);
+        $data['users'] = User::orderBy('id', 'DESC')->paginate(50);
         return view('admin.users.view')->with('data', $data);
     }
 

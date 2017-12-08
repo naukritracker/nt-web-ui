@@ -37,6 +37,7 @@ class FormBuilder implements FormBuilderContract
             if ($route == 'SaveProfile'
                 or $route == 'SaveEducationDetails'
                 or $route == 'SaveChangePassword'
+				 or $route == 'AddExp'
                 or $route == 'EmployerProfile'
             ) {
                 $profileForm = new ProfileFormBuilder();
@@ -46,7 +47,10 @@ class FormBuilder implements FormBuilderContract
                 if ($route == 'SaveEducationDetails') {
                     $form = $profileForm->buildProfileEducationDetails();
                 }
-                if ($route == 'SaveChangePassword') {
+                if ($route == 'AddExp') {
+                    $form = $profileForm->buildProfileEmpDetails();
+                }
+				 if ($route == 'SaveChangePassword') {
                     $form = $profileForm->buildChangePasswordForm();
                 }
                 if ($route == 'EmployerProfile') {

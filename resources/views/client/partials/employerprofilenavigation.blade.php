@@ -1,6 +1,6 @@
 <ul class="lhs-nav">
     <li @if(route('EmployerProfile') == Request::url()) class="active" @endif>
-        <a href="{{URL::route('EmployerProfile')}}" class="dashboard-icon">Dashboard</a>
+        <a href="{{URL::route('EmployerProfile')}}" class="dashboard-icon"><span></span>Dashboard</a>
     </li>
     <li @if(route('ResumeSearch') == Request::url()) class="active" @endif>
         <a href="{{URL::route('ResumeSearch')}}" class="search-icon">Search Resumes</a>

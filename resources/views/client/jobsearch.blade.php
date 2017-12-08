@@ -37,14 +37,14 @@
     </div>
 </div>
 </section>
-{!!Form::open(array('id'=>'k'))!!}
+
 <div class="container">
   <div class="row mar-b20">
     <div class="col-sm-3 animated fadeInLeft">
 
         <h4 class="sm-title  mar-t10">Filter By <span id="activatefilternow" class="pull-right"></span></h4>
 
-
+{!!Form::open(array('id'=>'k'))!!}
         <ul class="lhs-nav filter-block">
             <input type="hidden" id="searchjobsdata" value="{{URL::route('LoadSearchJobsFilterData')}}">
             <li><a href="javascript:void(0)" >Location</a></li>
@@ -65,7 +65,7 @@
             <li><a href="javascript:void(0)">Company</a></li>
              <div class="pad-l20 filter-div" id="company-box"></div>
 
-             <li><a href="javascript:void(0)">Walk In</a></li>
+             <li><a href="javascript:void(0)">Walk In Interviews</a></li>
               <div class="pad-l20 filter-div" id="company-box">
                  <div class="checkbox">
                     <label>
@@ -79,7 +79,8 @@
 
     </div>
       <div>
-
+{!!Form::token()!!}
+{!!Form::close()!!}
           <button class="btn btn-instagram"><a href="{{ route('Home')  }}">home</a></button>
       </div>
     <div class="col-sm-9">
@@ -122,8 +123,8 @@
                               <span>{{$job->state->state}} / {{$job->country->country}}</span>
                           @endif
 
-                          @if($job->created_at)
-                              <span>{{$job->created_at->diffForHumans()}}</span>
+                          @if($job->updated_at)
+                              <span>{{$job->updated_at->diffForHumans()}}</span>
                           @endif
                       </p>
                       <div class="lj-description" id="jobdescription_{{$job->id}}">
@@ -208,8 +209,7 @@
 </div>
 
 @stop
-{!!Form::token()!!}
-{!!Form::close()!!}
+
 @section('js')
 	@parent
   {!! Html::script('assets/js/slick.min.js') !!}

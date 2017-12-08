@@ -10,7 +10,7 @@ class AdminVisaController extends Controller
 {
     public function showVisa()
     {
-        $data['countries'] = Country::orderBy('country')->paginate(15);
+        $data['countries'] = Country::orderBy('country')->paginate(50);
         return view('admin.visa.view')->with('data', $data);
     }
 

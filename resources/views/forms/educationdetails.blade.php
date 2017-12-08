@@ -21,6 +21,9 @@
     <div class="tab-content">
 
 
+<?php
+ $ending_year = date('Y', strtotime('+4 year'));
+ ?>
 
         <div role="tabpanel" class="tab-pane active" id="ed-ug">
             <div class="col-xs-12">
@@ -29,7 +32,7 @@
                         <label for="">Basic/graduation<span class="error-text">*</span></label>
 
 
-                        {!!Form::select('graduation',['Not Pursuing Graduation','B.A','B.Arch','B.Des','B.El.Ed','B.P.Ed','B.U.M.S','BAMS','B.B.A/ B.M.S','B.Com','B.Ed','BDS','BFA','BHM','B.Pharma','B.Sc','B.Tech/B.E.','BHMS','LLB','MBBS','Diploma','BVSC','Other'],Auth::user()->userdetail->graduation,['placeholder'=>'Select','class'=>'form-control'])!!}
+                        {!!Form::select('graduation',['B.A','B.Arch','B.Des','B.El.Ed','B.P.Ed','B.U.M.S','BAMS','B.B.A/ B.M.S','B.Com','B.Ed','BDS','BFA','BHM','B.Pharma','B.Sc','B.Tech/B.E.','BHMS','LLB','MBBS','Diploma','BVSC','Other'],Auth::user()->userdetail->graduation,['placeholder'=>'Select','class'=>'form-control'])!!}
 
                     <!-- <select class='form-control' name="graduation" >
 
@@ -86,7 +89,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Year<span class="error-text">*</span></label>
-                        {!!  Form::selectRange('ug_year', 2021,1940,Auth::user()->userdetail->ug_year, ['class' => 'form-control', 'placeholder'=>'Passing year','required']) !!}
+                        {!!  Form::selectRange('ug_year', $ending_year,1940,Auth::user()->userdetail->ug_year, ['class' => 'form-control', 'placeholder'=>'Passing year','required']) !!}
                     </div>
                 </div>
             </div>
@@ -158,7 +161,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Year</label>
-                        {!!  Form::selectRange('pg_year', 2021,1940, Auth::user()->userdetail->pg_year, ['class' => 'form-control', 'placeholder'=>' Passing year']) !!}
+                        {!!  Form::selectRange('pg_year', $ending_year,1940, Auth::user()->userdetail->pg_year, ['class' => 'form-control', 'placeholder'=>' Passing year']) !!}
                     </div>
                 </div>
             </div>
@@ -190,7 +193,7 @@
                 <div class="row pad-t10">
                     <div class="form-group">
                         <label for="name">Year</label>
-                        {!!  Form::selectRange('certification_year', 2021,1940,Auth::user()->userdetail->certification_year, ['class' => 'form-control', 'placeholder'=>'year']) !!}
+                        {!!  Form::selectRange('certification_year', $ending_year,1940,Auth::user()->userdetail->certification_year, ['class' => 'form-control', 'placeholder'=>'year']) !!}
                     </div>
 
                 </div>
@@ -199,7 +202,7 @@
     </div>
 </div>
 
-{!! Form::hidden('progress_percentage', 70, ['class'=>'form-control','required']) !!}
+{!! Form::hidden('progress_percentage', 20, ['class'=>'form-control','required']) !!}
 
 <div class="col-xs-12 text-center pad-t40">
     <div class="form-group">

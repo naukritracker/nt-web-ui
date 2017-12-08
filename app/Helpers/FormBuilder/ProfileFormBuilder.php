@@ -34,7 +34,7 @@ class ProfileFormBuilder extends CommonFormBuilder
         $middleElem = ceil(count($dob_year_options)/2);
         $keys = array_keys($dob_year_options);
         $middleKey = $keys[$middleElem];
-        $setyear = $dob_year_options[$middleKey];
+      // $setyear = $dob_year_options[$middleKey];
 
         if (isset(Auth::user()->userdetail->dob_year) && Auth::user()->userdetail->dob_year != 0) {
             $setyear = Auth::user()->userdetail->dob_year;
@@ -73,7 +73,14 @@ class ProfileFormBuilder extends CommonFormBuilder
         $selectmaritalstatus = array();
         $selectmaritalstatus['Married'] = 'Married';
         $selectmaritalstatus['Single / Unmarried'] = 'Single / Unmarried';
-        $selectmaritalstatus['In a Relationship'] = 'In a Relationship';
+
+		
+		
+		
+		$selectexp = array();
+        $selectexp['Fresher'] = 'Fresher';
+        $selectexp['tab'] = 'Experienced';
+        
 
         $userdetail = $this->escapeUserDetail(Auth::user()->userdetail);
         return view('forms.resumeeditor')->with('userdetail', $userdetail)
@@ -83,10 +90,11 @@ class ProfileFormBuilder extends CommonFormBuilder
                                         ->with('selectindustry', $selectindustry)
                                         ->with('selectlocations', $selectlocations)
                                         ->with('totalexp', $totalexp)
-                                        ->with('setyear', $setyear)
+                                      //->with('setyear', $setyear)
                                         ->with('dob_year_options', $dob_year_options)
                                         ->with('dob_month_options', $dob_month_options)
                                         ->with('dob_day_options', $dob_day_options)
+										->with('selectexp', $selectexp)
                                         ->render();
     }
 
@@ -97,6 +105,49 @@ class ProfileFormBuilder extends CommonFormBuilder
     {
         $userdetail = $this->escapeUserDetail(Auth::user()->userdetail);
         return view('forms.educationdetails')->with('userdetail', $userdetail)->render();
+    }
+	
+	public function buildProfileEmpDetails()
+    {
+		
+       
+
+        $selectindustry = array();
+        $industries = Industry::orderBy('industry')->get();
+        foreach ($industries as $i) {
+            $selectindustry[$i->id] = $i->industry;
+        }
+
+        $selectfunctional = array();
+        $functionalareas = FunctionalArea::orderBy('functional_area')->get();
+        foreach ($functionalareas as $f) {
+            $selectfunctional[$f->id] = $f->functional_area;
+        }
+
+       
+		
+		
+ $annual_lakh_options = array();
+  $annual_lakh_options[0]='Lakhs';
+        for ($i=1; $i<=99; $i++) {
+            array_push($annual_lakh_options, $i);
+        }
+
+        $annual_thousand_options = array();
+		$annual_thousand_options[0]='Thousands';
+        for ($i=0; $i<100; $i++) {
+            array_push($annual_thousand_options, $i);
+        }
+
+		
+
+        $userdetail = $this->escapeUserDetail(Auth::user()->userdetail);
+        return view('forms.empDetails')->with('userdetail', $userdetail)                                   
+                                        ->with('selectfunctional', $selectfunctional)
+                                        ->with('selectindustry', $selectindustry)                                     
+										->with('annual_lakh_options', $annual_lakh_options)
+										->with('annual_thousand_options', $annual_thousand_options)									
+                                        ->render();
     }
 
     /**

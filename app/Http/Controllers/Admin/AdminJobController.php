@@ -49,9 +49,9 @@ class AdminJobController extends Controller
 
 
         if ($selecteduser->hasRole(['admin','su']) && $selecteduser->id == Auth::user()->id) {
-            $data['jobs'] = JobPosting::orderBy($sort, $order)->paginate(15);
+            $data['jobs'] = JobPosting::orderBy($sort, $order)->paginate(50);
         } else {
-            $data['jobs'] = JobPosting::where('user_id', $id)->orderBy($sort, $order)->paginate(15);
+            $data['jobs'] = JobPosting::where('user_id', $id)->orderBy($sort, $order)->paginate(50);
         }
         $data['countries'] = $countries;
         return view('admin.jobposting.view')->with('data', $data)->with('sort', $sort)->with('order', $order);

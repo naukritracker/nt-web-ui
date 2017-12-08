@@ -78,12 +78,22 @@
                 <nav class="collapse navbar-collapse bs-navbar-collapse">
 
                     <ul class="nav navbar-nav navbar-right mar-sm-t25">
-                        <li >
+                        <li id="togg2">
                             <a>Search Jobs by Country:</a>
                         </li>
                         <li id= "togg">
 
-                            <select class="form-control "  id="dropdown" onchange="location=this.value;">
+                      <select class="form-control "  id="select3"  >
+                                <option value="ChooseCountry" selected>Choose Country</option>
+                                <option value="UAE">UAE</option>
+                                <option value="SaudiArabia" >Saudi Arabia</option>
+                                <option value="Oman" >Oman</option>
+                                <option value="Qatar" >Qatar</option>
+                                <option value="Kuwait" >Kuwait</option>
+                                <option value="Bahrain" >Bahrain</option>
+                              
+                            </select>
+					  		<!-- <select class="form-control "  id="dropdown" onchange="location=this.value;">
                                 <option value="">Choose Country</option>
                                 <option value="/search/jobs/united-arab-emirates">UAE</option>
                                 <option value="/search/jobs/saudi-arabia" >Saudi Arabia</option>
@@ -92,8 +102,10 @@
                                 <option value="/search/jobs/kuwait" >Kuwait</option>
                                 <option value="/search/jobs/bahrain" >Bahrain</option>
                                 <option value="/search/jobs/all-gulf-countries" >All Gulf Countries</option>
-                            </select>
-
+                            </select>-->
+					
+							
+  
                         </li>
 
 
@@ -105,7 +117,7 @@
                             </div> -->
 
                         @if(Auth::user('employer'))
-                            <li @if(route('EmployerProfile') == Request::url() or route('ResumeSearch') == Request::url() or route('ShowEmployerJobPosting') == Request::url()) class="active" @endif>
+                            <li  @if(route('EmployerProfile') == Request::url() or route('ResumeSearch') == Request::url() or route('ShowEmployerJobPosting') == Request::url()) class="active" @endif>
                                 <a href="{{URL::route('EmployerProfile')}}">Employer</a>
                             </li>
                             <li class="dropdown @if(route('ResumeSearch') == Request::url() or route('ShowEmployerJobPosting') == Request::url()) active @endif">
@@ -146,7 +158,7 @@
                         @else
 
 
-                            <li @if(route('Employers') == Request::url()) class="active" @endif>
+                            <li id= "togg1" @if(route('Employers') == Request::url()) class="active" @endif>
                                 <a href="{{URL::route('Employers')}}">Employers</a>
                             </li>
                         @endif
@@ -309,17 +321,18 @@
     {!! Html::script('assets/js/bootstrap.min.js') !!}
     {!! Html::script('assets/js/pnotify.custom-3.min.js') !!}
 
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
 
         var selectedItem = sessionStorage.getItem("SelectedItem");
         $('#dropdown').val(selectedItem);
+
 
         $('#dropdown').change(function() {
             var dropVal = $(this).val();
             sessionStorage.setItem("SelectedItem", dropVal);
         });
 
-    </script>
+    </script> -->
     <script type="text/javascript">//PNotify.prototype.options.styling = "fontawesome";</script>
     <script type="text/javascript">
         token = $('meta[name="csrf-token"]').attr('content');
@@ -332,19 +345,136 @@
 
 
     <script>
+	
+	
+	
+	
+	
+		
+	var cityMapping = {
+  ChooseCountry:["City"],	
+  UAE: ["Abu Dhabi", "Ajman", "Dubai","Fujairah","Sharjah","Umm Al Qaiwain"],
+  SaudiArabia: ["Riyadh", "Jeddah", "Mecca","Al Madinah","Al-Ahsa","Ta'if","Dammam/Khobar","Buraidah","Tabuk"],
+  Oman: ["Muscat", "Zufar"],
+  Qatar: ["Doha"],
+  Kuwait: ["Al Ahmadi", "Al Farwaniyah", "Al Jahra","Kuwait City","Hawally"],
+  Bahrain: ["Manama"]
+}	
 
-function ch() {
+
+var visaMapping = {
+  ChooseCountry:["Visa"],
+  UAE: ["Employment Visa", "Employment Visa - Cancelled", "Family Sponsorship Visa","Long Term Visit - 90days","Tourist Visa - 30days","Mission Visa"],
+  SaudiArabia: ["Business Visa - 180 Days", "Employment Visa - Transferable", "Employment Visa - Non-Transferable","Family Sponsorship Visa"],
+  Oman: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Qatar: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Kuwait: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Bahrain: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"]
+}		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+var diction1 = {
+  A1: ["B1", "B2", "B3"],
+  A2: ["B4", "B5", "B6"]
+}
+
+var diction2 = {
+  A1: ["B11", "B2", "B3"],
+  A2: ["B44", "B5", "B6"]
+}
+// bind change event handler
+$('#select3').change(function() {
+  // get the second dropdown
+  $('#B').html(
+      // get array by the selected value
+      cityMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+  
+  $('#C').html(
+      // get array by the selected value
+      visaMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+    // trigger change event to generate second select tag initially
+}).change()
+
+	/*function fo1()
+	 $('#select5').on('click change', function () {
+                        if ($(this).val()) {
+                            $.post('async/loadcountryrelateddata/' + $(this).val(), {_token: token}, function (data) {
+                                $('#state_i').html(data.states);
+                                $('#visa_id').html(data.visas);
+                            }).fail(function () {
+                                var notice = new PNotify({
+                                    title: 'Error',
+                                    text: 'We were unable to retrieve form data from our servers.',
+                                    type: 'error',
+                                    buttons: {
+                                        closer: false,
+                                        sticker: false
+                                    }
+                                });
+
+                                notice.get().click(function () {
+                                    notice.remove();
+                                });
+                            });
+                        }
+                    });
+	}*/
+	
+/*function dropChange1() {
     $("#select1").change(function() {
         if ($(this).data('options') === undefined) {
-            /*Taking an array of all options-2 and kind of embedding it on the select1*/
+          
+
             $(this).data('options', $('#select2 option').clone());
         }
         var id = $(this).val();
         var options = $(this).data('options').filter('[value=' + id + ']');
+
         $('#select2').html(options);
     });
 }
 
+function dropChange() {
+    $("#select3").change(function() {
+        if ($(this).data('options') === undefined) {
+          
+            $(this).data('options', $('#select1 option').clone());
+			
+
+        }
+        var id = $(this).val();
+        var options = $(this).data('options').filter('[value=' + id + ']');
+         $('#select1').html(options);
+
+    });
+}
+*/
     </script>
 
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

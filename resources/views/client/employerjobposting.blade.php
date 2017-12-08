@@ -32,6 +32,10 @@
     {!! Html::script('assets/js/jquery.validate.min.js') !!}
     {!! Html::script('assets/unisharp/laravel-ckeditor/ckeditor.js') !!}
     <script type="text/javascript">
+	
+	$('#togg').hide();
+	
+	
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');

@@ -433,14 +433,25 @@ Route::post('search/jobs/load/async/data', ['as'=>'LoadSearchJobsFilterData', 'u
 //GET|POST Job Listing based on search parameters OR/AND filters OR/AND sorting order
 Route::any('search/results', ['as'=>'SearchForJobs', 'uses'=>'Client\JobController@searchJobs']);
 
+
 //GET|POST View search job details - @param ID job
 Route::any('job/details/{id}', ['as'=>'JobDetails', 'uses'=>'Client\JobController@showJobDetails']);
 
 
 
+ /*Route::post(
+        '/add/async/loadcountryrelateddata/{id?}',
+        ['as'=>'LoadCountryRelatedData', 'uses'=>'Client\JobController@loadCountryRelatedData']
+    );
+    //AJAX Load data like state list and visa types available depended on country_id - @param int country_id
+    Route::post(
+        '/show/async/loadcountryrelateddata/{id?}/{job?}',
+        ['as'=>'LoadCountryRelatedData', 'uses'=>'Client\JobController@loadCountryRelatedData']
+    );*/
+
 //GET|POST View search job details - @param ID job
 Route::post('contact-us/form', ['as'=>'ContactUsForm', 'uses'=>'Client\ContactController@doContact']);
-
++
 // ACCESS LEVEL : User
 Route::group(['middleware' => 'auth.user'], function () {
     Route::get('myview/{id}', ['as'=>'Myview', 'uses'=>'Client\ProfileController@show']);
@@ -459,6 +470,8 @@ Route::group(['middleware' => 'auth.user'], function () {
     Route::post('profile/uploadresume', ['as'=>'UploadResume', 'uses'=>'Client\ProfileController@uploadResume']);
     //GET Delete Resume(document) - @param int resume_id
     Route::get('profile/deleteresume/{id?}', ['as'=>'DeleteResume', 'uses'=>'Client\ProfileController@deleteResume']);
+	
+	Route::get('profile/deleteimage/{id?}', ['as'=>'DeleteImage', 'uses'=>'Client\ProfileController@deleteImage']);
 
     //AJAX Load Profile Summary
     Route::post(
@@ -471,6 +484,11 @@ Route::group(['middleware' => 'auth.user'], function () {
         'profile/async/loademploymentdetails',
         ['as'=>'LoadEmploymentDetails', 'uses'=>'Client\ProfileController@loadEmploymentDetails']
     );
+	 Route::post(
+       'profile/async/loadempdetails',
+      ['as'=>'LoadEmpDetails', 'uses'=>'Client\ProfileController@loadEmpDetails']
+    );
+	Route::post('profile/addexp', ['as'=>'AddExp', 'uses'=>'Client\ProfileController@addExp']);
     //POST Add New EXperience data
     Route::post('profile/addexperience', ['as'=>'AddExperience', 'uses'=>'Client\ProfileController@addExperience']);
     //GET Delete Experience data - @param int experience_id

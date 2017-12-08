@@ -8,16 +8,22 @@
                     <div class="col-xs-12" id="tabs">
                         <ul class="nav nav-pills nav-justified thumbnail">
                             <li class="active"><a href="#edit-basic-information" id="edit-basic-information-button" aria-controls="edit-basic-information" role="tab" data-toggle="tab" class="profile-sum-icon">
-                                    <h4 class="list-group-item-heading">Personal Details</h4>
+                                    <h4 class="list-group-item-heading">My Profile</h4>
+									<i class="fa fa-user" aria-hidden="true"></i>
+                                </a></li>
+                            <li ><a href="#edit-education-details" id="edit-education-details-button" aria-controls="edit-education-details" role="tab" data-toggle="tab" class="education-icon"  >
+                                    <h4 class="list-group-item-heading">Academics</h4>
+									<i class="fa fa-graduation-cap" aria-hidden="true"></i>
 
                                 </a></li>
-                            <li ><a href="#edit-education-details" id="edit-education-details-button" aria-controls="edit-education-details" role="tab" data-toggle="tab" class="education-icon" >
-                                    <h4 class="list-group-item-heading">Education Information</h4>
+								<li><a href="#edit-emp-details" id="edit-emp-details-button" aria-controls="edit-emp-details" role="tab" data-toggle="{!! Auth::user()->userdetail->exp_level !!}" class="profile-sum-icon" >
+                                    <h4 class="list-group-item-heading">Career Details</h4>
+										<i class="glyphicon glyphicon-road" aria-hidden="true"></i>
+                                </a></li>
 
-                                </a></li>
-                            <li><a href="#edit-employment-details" id="edit-employment-details-button" aria-controls="edit-employment-details" role="tab" data-toggle="tab" class="profile-sum-icon" >
-                                    <h4 class="list-group-item-heading">Employment Details</h4>
-                                </a></li>
+                            <!--<li><a href="#edit-employment-details" id="edit-employment-details-button" aria-controls="edit-employment-details" role="tab" data-toggle="tab" class="profile-sum-icon" >
+                                    <h4 class="list-group-item-heading">Emp Details</h4>
+                                </a></li> -->
 
                         </ul>
                     </div>
@@ -52,9 +58,11 @@
                             <div class="form-group text-center">
                                 <input type="file"   accept=".doc,.docx,.rtf,.pdf" class="form-control" name="profile_resume">
                                 <br>
+								{!! Form::hidden('progress_percentage', 20, ['class'=>'form-control','required']) !!}
                                 <button type="submit" class="btn btn-sm btn-success">Upload Resume</button>
 
                             </div>
+							
                             {!!Form::token()!!}
                             {!!Form::close()!!}
                         </div>
@@ -112,6 +120,16 @@
                         </div>
                     </div>
 
+					 <div role="tabpanel" class="tab-pane" id="edit-emp-details">
+                        <div class="clearfix">
+                            <div class="clearfix pad-t40pr pad-l50pr">
+                                <i class="fa fa-circle-o-notch fa-spin green"></i>
+                                <i class="fa fa-circle-o-notch fa-spin red"></i>
+                                <i class="fa fa-circle-o-notch fa-spin blue"></i>
+                                <p><b>Loading...</b></p>
+                            </div>
+                        </div>
+                    </div>
                     <div role="tabpanel" class="tab-pane" id="edit-employment-details">
                         <div class="clearfix">
                             <div class="clearfix pad-t40pr pad-l50pr">
@@ -414,7 +432,7 @@
                                 <option value='12'>December</option>
                             </select>
                         </div>-->
-                        {!! Form::hidden('progress_percentage', 100, ['class'=>'form-control']) !!}
+                        {!! Form::hidden('progress_percentage', 30, ['class'=>'form-control']) !!}
                         <div class="col-xs-12 text-center">
                             <button type="submit" class="btn btn-lg btn-success" id="sub" onclick="relo();">Save Experience</button>
                         </div>
@@ -489,6 +507,12 @@
         </div>
     </div>
 
+  
+                       
+                               
+                                   
+                            
+                
 
 
 @stop
@@ -499,7 +523,49 @@
 
 
     <script type="text/javascript">
+	
+	
+	
+	function ychange(obj) {
+    document.getElementById('gy1').selectedIndex = obj.selectedIndex;
+}
 
+
+function pos()
+{
+	var a=document.getElementById('gy1').value;
+	var b=document.getElementById('gy2').value;
+	if(a<b)
+	{
+		 alert("Please enter valid duration");
+	}
+	
+}
+	//document.getElementById("ks").disabled = true;
+function yesnoCheck()
+{
+	
+   
+        if (document.getElementById('noCheck').checked) {
+			
+			
+        document.getElementById('ifYes').style.display = 'block';
+    }
+    else document.getElementById('ifYes').style.display = 'none';
+	
+}
+	
+	function exp1()
+{
+	
+   
+         $(".desc").hide();
+	
+	
+}
+	
+	
+	
         function fo2() {
             $('#register_coun').on('click change', function (event) {
                 if ($(this).val() === '') {
@@ -589,16 +655,44 @@
             document.getElementById('profile_image').src = "assets/img/userpic_large.png";
 
         }
+		
+		
+		
+		var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];    
+	function ValidateSingleInput(oInput) {
+    if (oInput.type == "file") {
+        var sFileName = oInput.value;
+         if (sFileName.length > 0) {
+            var blnValid = false;
+            for (var j = 0; j < _validFileExtensions.length; j++) {
+                var sCurExtension = _validFileExtensions[j];
+                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                    blnValid = true;
+                    break;
+                }
+            }
+             
+            if (!blnValid) {
+                alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+                oInput.value = "";
+                return false;
+            }
+        }
+    }
+    return true;
+}
+function expand()
+{
+                    $(".hidden-content").show();
+}
+
+        $(document).ready(function (){
+        $('#togg1').hide();
+        });
         $(document).ready(function (){
 
 
-
-            jQuery(document).ready(function() {
-                jQuery(".expand-content-link").click(function() {
-                    jQuery(this).next(".hidden-content").show();
-                    return false;
-                });
-            });
+           
 
 
             $(document).ready(function() {
@@ -618,10 +712,7 @@
             });
 
 
-            $('#gMonth2').change(function(){
-                var month = $(this).val();
-                $('#gMonth1').val(month);
-            });
+
 
 
 
@@ -635,6 +726,9 @@
                     $('#edit-profile-summary-button').trigger('click');
                 }
 
+				if(window.location.hash ==='#page=empdetails'){
+                    $('#edit-emp-details-button').trigger('click');
+                }
 
                 if(window.location.hash ==='#page=employmentdetails'){
                     $('#edit-employment-details-button').trigger('click');
@@ -790,6 +884,7 @@
 
                     $('#load_image').click(function (event){
                         $('#load_image_field').trigger('click');
+						
                     });
 
                     $('#load_image_field').change(function (event){
@@ -859,7 +954,6 @@
                 $('.fresher').prop("disabled", false);
             }
         });
-
 
 
         $('#add-experience-form').submit(function (e){
@@ -1011,7 +1105,7 @@
         $('#profile_form').submit(function (e){
             e.preventDefault();
         });
-
+ 
         //CLICK Profile Summary
         $('#edit-profile-summary-button').click(function (e){
             window.location.hash = "page=profilesummary";
@@ -1048,6 +1142,23 @@
             });
         });
 
+		$('#edit-emp-details-button').click(function (e){
+            window.location.hash = "page=empdetails";
+            $.post('profile/async/loadempdetails',{_token:token},function (data){
+                if(data === -1){
+                    ajaxerrorclicktoclose();
+                }else{
+                    var animationName = 'animated fadeInUp';
+                    $('#edit-emp-details').addClass(animationName).html(data).one(animationend,function() {
+                        $(this).removeClass(animationName);
+                    });
+                }
+
+            }).fail(function (){
+                ajaxerrorclicktoclose();
+            });
+        });
+
         //CLICK Employment Details
         $('#edit-education-details-button').click(function (e){
             window.location.hash = "page=educationdetails";
@@ -1066,6 +1177,12 @@
             });
         });
 
+		$.validator.addMethod("password_not_same", function(value, element) {
+   return $('#old_password').val() != $('#new_password').val()
+}, "New password should not be same as current password");
+
+
+
         //CLICK Change Password
         $('#edit-change-password-button').click(function (e){
             window.location.hash = "page=changepassword";
@@ -1081,6 +1198,7 @@
                     $('#change_password_form').validate({
                         rules: {
                             old_password: {
+								password_not_same: true,
                                 required: true,
                                 minlength: 8,
                                 maxlength: 12,
@@ -1088,10 +1206,12 @@
                             } ,
 
                             new_password: {
+								password_not_same: true,
                                 required: true,
                                 minlength: 8,
                                 maxlength: 12,
                                 specialChars : true
+								// notEqualTo:'#old_password'
                             } ,
 
                             new_password_confirmation: {
