@@ -10,7 +10,7 @@ class AdminStaticPagesController extends Controller
 {
     public function showStaticPages()
     {
-        $data['staticpages'] = StaticPage::orderBy('title', 'DESC')->paginate(15);
+        $data['staticpages'] = StaticPage::orderBy('title', 'DESC')->paginate(50);
         return view('admin.staticpages.view')->with('data', $data);
     }
 

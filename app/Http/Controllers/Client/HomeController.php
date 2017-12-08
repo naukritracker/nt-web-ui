@@ -72,4 +72,60 @@ class HomeController extends Controller
             return view('client.termsandconditions');
         }
     }
+	
+	
+	 public function loadCountryRelatedData($country = null, $job = null)
+    {
+        $html = "";
+        if ($job) {
+            $jobposting = JobPosting::find($job);
+        } else {
+            $jobposting = null;
+        }
+
+        if ($country != null) {
+            $states = State::where('country_id', $country)->get();
+        } else {
+            $states = State::all();
+        }
+        $html .= '<option value="" selected>Select state</option>';
+        $html .= '<option value="0">Not Specified</option>';
+        foreach ($states as $s) {
+            if ($jobposting and $s->id == $jobposting->state_id) {
+                $html .= '<option value="'.$s->id.'" selected="selected">'.$s->state.'</option>';
+            } else {
+                $html .= '<option value="' . $s->id . '">' . $s->state . '</option>';
+            }
+        }
+
+        $data['states'] = $html;
+
+        $html2 = "";
+        if ($country != null) {
+            $visas = Visa::where('country_id', $country)->get();
+        } else {
+            $visas = Visa::all();
+        }
+        if ($jobposting) {
+            $html2 .= '<option value="">Select visa</option>';
+        } else {
+            $html2 .= '<option value="" selected>Select visa</option>';
+        }
+        $html2 .= '<option value="0">Not required</option>';
+        foreach ($visas as $v) {
+            if ($jobposting and strpos($jobposting->visa, $v->visa) !== false) {
+                $html2 .= '<option value="'.$v->visa.'" selected="selected">'.$v->visa.'</option>';
+            } else {
+                $html2 .= '<option value="'.$v->visa.'">'.$v->visa.'</option>';
+            }
+        }
+
+        $data['visas'] = $html2;
+
+        return $data;
+    }
+	
+	
+	
+	 
 }

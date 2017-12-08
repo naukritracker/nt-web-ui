@@ -38,14 +38,14 @@ class JobController extends Controller
                 if($state != null){
                     $statedata = State::where('slug',$state)->first();
                     $countrydata = Country::where('slug',$country)->first();
-                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('state_id',$statedata->id)->where('active_flag',1)->paginate(10);
+                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('state_id',$statedata->id)->where('active_flag',1)->paginate(50);
                 }else{
 
                     $countrydata = Country::where('slug',$country)->first();
-                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('active_flag',1)->paginate(10);
+                    $jobs = JobPosting::where('country_id',$countrydata->id)->where('active_flag',1)->paginate(50);
                 }
             }else{
-                $jobs = JobPosting::where('active_flag',1)->paginate(10);
+                $jobs = JobPosting::where('active_flag',1)->paginate(50);
             }
 
             return json($jobs);
@@ -66,22 +66,29 @@ class JobController extends Controller
                         ->where('state_id',$statedata->id)
                         ->where('active_flag',1)
                         ->orderBy($order,'desc')
-                        ->paginate(10);
-
+                        ->paginate(50);
+				$availablejobs = JobPosting::where('country_id',$countrydata->id)
+                        ->where('state_id',$statedata->id)
+                        ->where('active_flag',1)
+						->count();
                 }else{
                     $countrydata = Country::where('slug',$country)->first();
                     $data['jobs'] = JobPosting::where('country_id',$countrydata->id)
                         ->where('active_flag',1)
                         ->orderBy($order,'desc')
-                        ->paginate(10);
+                        ->paginate(50);
+						$availablejobs = JobPosting::where('country_id',$countrydata->id)
+                        ->where('active_flag',1)
+						->count();
                 }
             }else{
                 $data['jobs'] = JobPosting::where('active_flag',1)
                     ->orderBy($order,'desc')
-                    ->paginate(10);
+                    ->paginate(50);
+					 $availablejobs = JobPosting::where('active_flag',1)->count();
             }
 
-            $availablejobs = JobPosting::where('active_flag',1)->count();
+            
             return view('client.jobsearch')->with('data',$data)->with('availablejobs',$availablejobs)->with('order',$order);
         }
     }
@@ -233,7 +240,7 @@ class JobController extends Controller
             });
 
         $data['jobs'] = $query->orderBy($order, 'desc')
-            ->paginate(10);
+            ->paginate(50);
 
 
         return view('client.jobsearch')->with('data', $data)

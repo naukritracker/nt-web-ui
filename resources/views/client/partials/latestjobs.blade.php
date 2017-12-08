@@ -25,4 +25,4 @@
         </ul>
         <p class="txtc pad-t20"><a href="{{URL::route('SearchJobs')}}">View All &raquo;</a></p>
     </div>
-    <!-- Latest Jobs Ends Here -->a
+    <!-- Latest Jobs Ends Here -->

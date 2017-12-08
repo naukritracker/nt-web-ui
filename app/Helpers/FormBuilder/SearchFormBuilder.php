@@ -5,6 +5,8 @@ namespace App\Helpers\FormBuilder;
 use App\Models\EmployerUser;
 use App\Models\JobPosting;
 use App\Models\UserDetail;
+use App\Models\Country;
+use App\Models\State;
 use App\User;
 
 class SearchFormBuilder extends CommonFormBuilder
@@ -49,10 +51,27 @@ class SearchFormBuilder extends CommonFormBuilder
         $statejobs = JobPosting::select('state_id')->where('active_flag', '1')->distinct()->get();
         foreach ($statejobs as $job) {
             if ($job->state) {
-                $selectstate[$job->state_id] = $job->state->state.' ('.$job->state->country->country.')';
+                $selectstate[$job->state_id] = $job->state->state.' ('.$job->state->country->country.')';;
             }
         }
 
+		
+		
+		$statesall = State::all();
+        $selectstateall = array();
+        $selectstateall[0] = 'Not Specified';
+        foreach ($statesall as $state) {
+            $selectstatesall[$state->id] = $state->country->country.' - '.$state->state;
+        }
+		
+		
+		$html = "";
+        $countries = Country::all();
+        $selectcountry = array();
+        foreach ($countries as $c) {
+            $selectcountry[$c->id] = $c->country;
+        }
+		
         $rolejobs = JobPosting::select('role')->where('active_flag', '1')
             ->groupBy('role')
             ->distinct()
@@ -61,10 +80,17 @@ class SearchFormBuilder extends CommonFormBuilder
         foreach ($rolejobs as $job) {
             $selectfunctionalarea[$job->role] = $job->role;
         }
+		
+		
+		
+		
+		
         return view('forms.homesearch')->with('selectfunctionalarea', $selectfunctionalarea)
                                         ->with('selectvisa', $selectvisa)
                                         ->with('selectexp', $selectexp)
                                         ->with('selectstate', $selectstate)
+										->with('selectstatesall', $selectstatesall)
+										->with('selectcountry', $selectcountry)
                                         ->render();
     }
 

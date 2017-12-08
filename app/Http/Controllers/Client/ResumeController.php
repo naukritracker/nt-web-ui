@@ -21,7 +21,7 @@ class ResumeController extends Controller
      */
     public function showResumeSearch()
     {
-        $candidates = User::where('active_flag', 1)->orderBy('updated_at', 'desc')->paginate(10);
+        $candidates = User::where('active_flag', 1)->orderBy('updated_at', 'desc')->paginate(50);
         return view('client.resumesearch')->with('candidates', $candidates);
     }
 
@@ -180,7 +180,7 @@ class ResumeController extends Controller
             $candidateCount = $query->count();
         }
         $candidates = $query->orderBy($order, 'desc')
-            ->paginate(10);
+            ->paginate(50);
 
         return view('client.resumesearch')
             ->with('candidates', $candidates)
@@ -211,13 +211,9 @@ class ResumeController extends Controller
                 if ($user->media and $user->media->content != '' and isset($user->media->raw)) {
                     if (preg_match("/\b" . $word . "\b/i", $user->media->raw)) {
                         $result[] = $user->toArray();
-                      print "success";
-                        error_log('message here.');
+
                     }
-                    else
-                    {
-                        print "fail";
-                    }
+
                 }
             }
         }

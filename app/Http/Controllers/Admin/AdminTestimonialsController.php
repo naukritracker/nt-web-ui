@@ -11,7 +11,7 @@ class AdminTestimonialsController extends Controller
 {
     public function showTestimonials()
     {
-        $data['testimonials'] = Testimonial::orderBy('id', 'desc')->paginate(15);
+        $data['testimonials'] = Testimonial::orderBy('id', 'desc')->paginate(50);
         return view('admin.testimonials.view')->with('data', $data);
     }
 

@@ -1,6 +1,7 @@
 <div class="clearfix">
     <div class="row" id="hhk">
-        {!! Form::open(["class"=>"row pad-t10 pad-b10", "id"=> "profile_form", "route" => "SaveProfile", "files"=>"true"]) !!}<div class="clearfix">
+        {!! Form::open(["class"=>"row pad-t10 pad-b10", "id"=> "profile_form", "route" => "SaveProfile", "files"=>"true"]) !!}
+        <div class="clearfix">
             <div class="col-sm-12">
                 <div class="form-group" >
                     <label for="profile_headline">Profile Headline </label>
@@ -22,9 +23,10 @@
 
                 {!! Html::image('assets/img/userpic_large.png', null, ['class'=>'img-responsive','id'=>'profile_image']) !!}
             @endif
-            <a href="javascript:void(0)" id="load_image">Upload</a>
-            <input type="file" name="load_image_field" id="load_image_field" style="display:none">
-            <a href="#" id="remove" onclick="foo()">Remove</a>
+            <a href="javascript:void(0)" id="load_image" >Upload</a>
+            <input type="file" name="load_image_field" id="load_image_field" accept="image/*" style="display:none" onchange="ValidateSingleInput(this);" >
+			  <a href="{{URL::route('DeleteImage',[Auth::user()->userdetail->profile_image])}}" >Remove</a>
+            <!-- <a href="#" id="remove" onclick="foo()">Remove</a> -->
 
 
         </div>
@@ -72,7 +74,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="city">State <span class="error-text">*</span></label>
+                    <label for="city">State/City <span class="error-text">*</span></label>
                     {!!Form::select('city',[], $userdetail->city,['placeholder'=>'Select State','class'=>'form-control','id'=>'register_stat','required'])!!}
 
                 </div>
@@ -96,7 +98,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="role">Role </label>
-                    {!! Form::text('role',$userdetail->role, ['placeholder'=>'Select Role', 'class'=>'form-control', 'id'=>'role', 'value'=>$userdetail->role]) !!}
+                    {!! Form::text('role',$userdetail->role, ['placeholder'=>'your role', 'class'=>'form-control', 'id'=>'role', 'value'=>$userdetail->role]) !!}
                 </div>
             </div>
             <div class="col-sm-6">
@@ -105,13 +107,13 @@
                     <label for="dob" >Date of Birth <span class="error-text">*</span></label>
                     <div class="row hmar5">
                         <div class="col-sm-4 hpad5" >
-                            {!! Form::select('dob_day', $dob_day_options, $userdetail->dob_day, ['placeholder'=>'Day', 'class'=>'form-control', 'required']) !!}
+                            {!! Form::select('dob_day', $dob_day_options, $userdetail->dob_day, ['placeholder'=>'DD', 'class'=>'form-control', 'required']) !!}
                         </div>
                         <div class="col-sm-4 hpad5" >
-                            {!! Form::select('dob_month', $dob_month_options, $userdetail->dob_month, ['placeholder'=>'Month', 'class'=>'form-control', 'required']) !!}
+                            {!! Form::select('dob_month', $dob_month_options, $userdetail->dob_month, ['placeholder'=>'MM', 'class'=>'form-control', 'required']) !!}
                         </div>
                         <div class="col-sm-4 hpad5">
-                            {!! Form::select('dob_year', $dob_year_options, $setyear, ['placeholder'=>'Year', 'class'=>'form-control', 'required']) !!}
+                            {!! Form::select('dob_year', $dob_year_options, $userdetail->dob_year, ['placeholder'=>'YYYY', 'class'=>'form-control', 'required']) !!}
                         <div class="col-sm-4 hpad5" ></div>
                     </div>
                 </div>
@@ -133,28 +135,31 @@
         </div>
         <div class="col-sm-12">
             <div class="form-group">
+			
+			
                 <label for="permanent_address">Permanent Address</label>
-                <textarea
-                        name="permanent_address"
-                        id="permanent_address"
-                        rows="2"
-                        class="form-control"
-                        placeholder="Enter your permanent address"></textarea>
+               {!!Form::textarea('permanent_address',Auth::user()->userdetail->permanent_address,['placeholder'=>'Permanent address','class'=>'form-control', 'rows'=>'2','required'])!!}
             </div>
         </div>
         <div class="clearfix">
 
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="preferred_location">Nationality<span class="error-text">*</span></label>
-                    {!! Form::select('preferred_location', $selectlocations, $userdetail->preferred_location, ['placeholder'=>'your nationality', 'class'=>'form-control', 'id'=>'preferred_location','required']) !!}
+                    <label for="preferred_location">Preferred Location<span class="error-text">*</span></label>
+                    {!! Form::select('preferred_location', $selectlocations, $userdetail->preferred_location, ['placeholder'=>'your preferred location', 'class'=>'form-control', 'id'=>'preferred_location','required']) !!}
                 </div>
+				 </div>
+				 <div class="col-sm-6">
+				<div class="form-group">
+                    <label for="preferred_location">Experience<span class="error-text">*</span></label>					
+				 {!!Form::select('exp',$selectexp,Auth::user()->userdetail->exp_level,['placeholder'=>'Select','class'=>'form-control','required' ])!!}
+				  </div>
             </div>
         </div>
 
 
 
-        {!! Form::hidden('progress_percentage', 40, ['class'=>'form-control','required']) !!}
+        {!! Form::hidden('progress_percentage', 30, ['class'=>'form-control','required']) !!}
 
         <hr>
         <div class="clearfix pad-t10">

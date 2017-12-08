@@ -82,7 +82,7 @@ class JobFormBuilder
         return view('forms.employerpostajob')->with('job', $job)
             ->with('formtype', $type)
             ->with('selectcountry', $selectcountry)
-            ->with('selectstate', $selectcountry)
+            ->with('selectstate',  $selectstateall)
             ->with('selectindustry', $selectindustry)
             ->with('selectcompany', $selectcompany)
             ->with('selectstatesall', $selectstatesall)

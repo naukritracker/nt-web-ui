@@ -59,7 +59,7 @@ class RegisterController extends Controller
     {
         $html = "";
         if ($country != null) {
-            $states = State::where('country_id', $country)->get();
+            $states = State::where('country_id', $country)->orderBy('state')->get();
         } else {
             $states = State::all();
         }
@@ -163,6 +163,7 @@ class RegisterController extends Controller
        // $userdetails->ug_specialization = 'abc';
        //$userdetails->ug_institute ='abc';
         $userdetails->ug_year = 4444;
+		//$userdetails->current_employer = 'aaaa';
 
         $userdetails->save();
 
@@ -287,10 +288,10 @@ class RegisterController extends Controller
                     ['Thank you for registering with us. Please log in to continue.']
                 );
             } else {
-                return redirect()->route('ShowLogin')->withErrors(['Invalid access protocol']);
+                return redirect()->route('ShowLogin');
             }
         } else {
-            return redirect()->route('ShowLogin')->withErrors(['Invalid access protocol']);
+            return redirect()->route('ShowLogin');
         }
     }
 
@@ -343,7 +344,7 @@ class RegisterController extends Controller
                 $employerUser->password = Hash::make($request->get('password'));
                 $digits = 8;
                 $confirmation_code = rand(pow(10, $digits-1), pow(10, $digits)-1);
-                $employerUser->active_flag = $confirmation_code;
+                $employerUser->active_flag = 1;
                 $employerUser->employer_id = 0;
                 if ($employerUser->save()) {
                     $employer->active_flag = 0;
@@ -402,6 +403,20 @@ class RegisterController extends Controller
 //                        );
                     // TODO : CHECK if setup properly
 //                    Auth::login("employer", $employerUser);
+
+Mail::send(
+           'emails.confirmregistration',
+            ['link' => route('ConfirmRegistration', ['email'=>$employerUser->email,'code'=>$confirmation_code])],
+            function ($m) use ($employerUser, $employer) {
+                $m->from(
+                   'no-reply@naukritracker.com'
+                    , 'Naukri Tracker'               );
+                $m->to($employerUser->email,  $employer->name)->subject('Welcome to naukritracker !');
+            }
+       );
+
+
+
                     $data['success'] = true;
                     $data['message'] = 'Please confirm your mail id when you get the chance ! Happy Hunting !';
                     $request->session()->flash('success', ['Please confirm your mail id when you get the chance ! Happy Hunting !']);

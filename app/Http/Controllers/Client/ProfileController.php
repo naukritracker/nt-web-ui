@@ -40,12 +40,200 @@ class ProfileController extends Controller
         $user = Auth::user();
         $ud=UserDetail::where('user_id', $user->id)->first();
         $jobs1 = JobPostingHasApplication::where('user_id',$ud->user_id)->first();
-        $jobs=JobPosting::where('id',$jobs1->jobposting_id )->paginate(10);
+        $jobs=JobPosting::where('id',$jobs1->jobposting_id )->paginate(50);
         return view('client.myview')->with('jobs', $jobs);
     }
+   
+
+
+	
+	 public function loadEmpDetails(Request $request, FormBuilder $formbuilder)
+    {
+		
+                   if ($request->ajax()) {
+            $html = $formbuilder->build('AddExp');
+            return $html;
+        } else {
+            return -1;
+        }          
+    }
+	 public function addExp(Request $request)
+    {
+        
+       
+        try{
+
+
+          
+ $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
+
+  
+             $userdetails->current_employer = $request->get('company');
+             $userdetails->c_f_month = $request->get('c_f_month');
+			 if($request->get('c_f_month')!=NULL)
+                    {
+                         $userdetails->c_f_month = $request->get('c_f_month');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->c_f_month = 0;
+                      
+
+                    }
+					 $userdetails->c_f_year = $request->get('c_f_year');
+			 if($request->get('c_f_year')!=NULL)
+                    {
+                         $userdetails->c_f_year = $request->get('c_f_year');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->c_f_year = 0;
+                      
+
+                    }
+					
+					
+					 $userdetails->p_f_month = $request->get('p_f_month');
+			 if($request->get('p_f_month')!=NULL)
+                    {
+                         $userdetails->p_f_month = $request->get('p_f_month');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->p_f_month = 0;
+                      
+
+                    }
+					 $userdetails->p_f_year = $request->get('p_f_year');
+			 if($request->get('p_f_year')!=NULL)
+                    {
+                         $userdetails->p_f_year = $request->get('p_f_year');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->p_f_year = 0;
+                      
+
+                    }
+					
+					
+					
+					 $userdetails->p_t_month = $request->get('p_t_month');
+			 if($request->get('c_t_month')!=NULL)
+                    {
+                         $userdetails->p_t_month = $request->get('p_t_month');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->p_t_month = 0;
+                      
+
+                    }
+					 $userdetails->p_t_year = $request->get('p_t_year');
+			 if($request->get('p_t_year')!=NULL)
+                    {
+                         $userdetails->p_t_year = $request->get('p_t_year');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->p_t_year = 0;
+                      
+
+                    }
+					
+					
+             $userdetails->designation = $request->get('designation');
+             $userdetails->prev_company = $request->get('previous_company');
+			 
+			 
+			 
+             
+             $userdetails->prev_designation = $request->get('prev_designation');			  
+             $userdetails->annual_lakh = $request->get('annual_lakh');
+			 if($request->get('annual_lakh')!=NULL)
+                    {
+                           $userdetails->annual_lakh = $request->get('annual_lakh');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->annual_lakh = 0;
+                      
+
+                    }
+             $userdetails->annual_thousand = $request->get('annual_thousand');
+			 if($request->get('annual_thousand')!=NULL)
+                    {
+                         $userdetails->annual_thousand = $request->get('annual_thousand');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->annual_thousand= 0;
+                      
+
+                    }
+             $userdetails->currency = $request->get('currency');
+             $userdetails->key_skills = $request->get('key_skills');
+             $userdetails->description = $request->get('employement_description');
+             
+			 if($request->get('total_years')!=NULL)
+                    {
+                         $userdetails->total_years = $request->get('total_years');
+						 
+
+                    }
+                    else
+                    {
+                         $userdetails->total_years= '0';
+                      
+
+                    }
+          
+			 if($request->get('total_months')!=NULL)
+                    {
+                         $userdetails->total_months= $request->get('total_months');
+						 
+
+                    }
+                    else
+                    {
+                        $userdetails->total_months= '0';
+                      
+
+                    }
+             $userdetails->emp_industry = $request->get('industry');
+             $userdetails->emp_functional_area = $request->get('functional_area');
+           
+           if((  $userdetails->progress_percentage+$request->get('progress_percentage'))<=100)
+		   {
+			     $userdetails->progress_percentage =   $userdetails->progress_percentage+$request->get('progress_percentage');
+		   }
+                $userdetails->save();
+            return redirect()->route('Profile',['#page=empdetails']);
+        }catch(Exception $e){
+            return back()->withErrors([$e]);
+        }
+
+
+    }
+
     public function showProfile(Request $request)
     {
-
 
         $companies = Company::all();
         $selectcompanies = array();
@@ -423,8 +611,8 @@ class ProfileController extends Controller
                                 <div class="col-sm-6">
                                      <div class="form-group">
                                         <label for=""><b>Current Location</b> </label><p>';
-            if (isset(Auth::user()->currentlocation)) {
-                $html .= Auth::user()->currentlocation->state;
+            if (isset(Auth::user()->userdetail->current_location)) {
+                $html .= Auth::user()->userdetail->current_location;
             } else {
                 $html .= 'No current location specified';
             }
@@ -577,11 +765,14 @@ class ProfileController extends Controller
             $user->userdetail->marital_status = $request->get('marital_status');
             $user->userdetail->permanent_address = $request->get('permanent_address');
             $user->userdetail->city = $request->get('city');
-            if( ($user->userdetail->progress_percentage!=100)and($user->userdetail->progress_percentage!=70))
-            {
-                $user->userdetail->progress_percentage = $request->get('progress_percentage');
-            }
-            $user->userdetail->nationality = $request->get('nation');
+			$user->userdetail->exp_level = $request->get('exp');
+           if(($user->userdetail->progress_percentage+$request->get('progress_percentage'))<=100)
+		   {
+			   $user->userdetail->progress_percentage = $user->userdetail->progress_percentage+$request->get('progress_percentage');
+		   }
+                
+           
+
             if($request->hasFile('load_image_field')){
                 $imageName = $user->userdetail->id . '.' . $request->file('load_image_field')->getClientOriginalExtension();
                 try{
@@ -609,6 +800,28 @@ class ProfileController extends Controller
         }
 
     }
+	
+	
+	public function deleteImage($id = null)
+    {
+        if ($id) {
+            
+				$imageName = Auth::user()->userdetail->profile_image;
+                File::delete(public_path().'/uploads/profile/'.$imageName);
+
+                $userdetail = UserDetail::where('profile_image', $id)->first();
+                $userdetail->profile_image = null;
+                $userdetail->save();
+				
+                return back()->with('success', ['Profile Image deleted']);
+            
+            }
+        else {
+            return back()->withErrors(['Unable to delete Profile Image']);
+        }
+    }
+	
+	
 
     public function uploadResume(Request $request)
     {
@@ -634,6 +847,12 @@ class ProfileController extends Controller
                 if ($media->save()) {
                     $userdetails = UserDetail::where('user_id', Auth::user()->id)->first();
                     $userdetails->resume_media_id = $media->id;
+				
+             if(($userdetails->progress_percentage+$request->get('progress_percentage'))<=100)
+	  {
+                $userdetails->progress_percentage = $userdetails->progress_percentage+ $request->get('progress_percentage');
+	  }
+            
                     $userdetails->save();
                     return back();
                 } else {
@@ -703,7 +922,7 @@ class ProfileController extends Controller
                             </tr>                         
                              <tr>
                             <th>End Date</th>
-                             <td>'.$exp->end_date->formatLocalized('%A %d %B %Y').'</td>
+                             <td>'.'present'.'</td>
                             </tr> 
                              <tr>
                              <th>Designation</th>
@@ -866,6 +1085,9 @@ class ProfileController extends Controller
 
 
 
+
+
+
             }
 
 
@@ -968,7 +1190,10 @@ class ProfileController extends Controller
                     $exp->save();
 
                     $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
-                    $userdetails->progress_percentage = $request->get('progress_percentage');
+					 if(( $userdetails->progress_percentage+$request->get('progress_percentage'))<=100)
+	  {
+                    $userdetails->progress_percentage = $userdetails->progress_percentage+$request->get('progress_percentage');
+	  }
                     $userdetails->save();
 
 
@@ -1064,10 +1289,12 @@ class ProfileController extends Controller
        $userdetails->certification_year = $request->get('certification_year');
        $userdetails->ug_year = $request->get('ug_year');
 
-       if($userdetails->progress_percentage!=100)
-       {
-           $userdetails->progress_percentage = $request->get('progress_percentage');
-       }
+      if(($userdetails->progress_percentage+$request->get('progress_percentage'))<=100)
+	  {
+		  $userdetails->progress_percentage =  $userdetails->progress_percentage+$request->get('progress_percentage');
+	  }
+           
+      
 
         $userdetails->save();
 

@@ -43,6 +43,8 @@
 		
 	</div>
 
+	
+	
 	@if(count($data['jobs'])>0)
 		{!!$data['jobs']->appends(['user' => isset($data['selecteduser']) ? $data['selecteduser'] : ''])->render()!!}
 		<table class="table table-condensed">
@@ -132,7 +134,7 @@
 						@else
 							Not Provided
 						@endif
-					</td>
+					</td>														
 					<td>
 					@if($job->apply != '' AND $job->walkin == 0) 
 						<a href="{{$job->apply}}" target="_blank">Apply Online</a>
@@ -141,8 +143,8 @@
 					@else
 						<span style="color:red">Not Specified</span>
 					@endif
-					</td>
-					<td>
+					</td>			
+				<td>
 					@if($job->active_flag == 0)
 						<span style="color:red;">Inactive</span>
 					@elseif($job->active_flag == 2)
@@ -153,13 +155,13 @@
 						<span style="color:red;">Not Specified</span>
 					@endif
 					</td>
+					
+					
+					
+					
 					<td>
 					@if(Auth::user()->hasRole(['admin','su']))
-                        @if($job->posted_by_employer)
-                            {{$job->employer->name}}
-                        @else
-                            {{$job->user->name}}
-                        @endif
+                     
                         <b>[
                     @endif
 
@@ -168,16 +170,15 @@
 					</td>
 					<td>
 					@if(Auth::user()->hasRole(['admin','su']))
-                        @if($job->posted_by_employer)
-                            {{$job->modifiedemployer->name}}
-                        @else
-                            {{$job->modifieduser->name}}
-                        @endif
+                      
                         <b>[
                     @endif
 					{{ $job->updated_at->diffForHumans() }}
 					@if(Auth::user()->hasRole(['admin','su'])) ]</b> @endif
 					</td>
+					
+					
+					
 					<td class="text-center">
 						<div class="col-xs-3 text-center"><a href="javascript:void(0)" class="viewjob" id="{{$job->id}}"><i class="fa fa-eye" title="View {{$job->title}} details"></i></a></div>
 						@if($job->active_flag == 1)
@@ -199,6 +200,9 @@
 	@else
 		<p class="text-danger">No <b>Jobs</b> have been posted. Add one <b><u><a href="javascript:void(0)" class="addjob">now</a></u></b></p>
 	@endif
+
+	
+	
 
 	<!-- Modal -->
 	<div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="jobModalLabel">

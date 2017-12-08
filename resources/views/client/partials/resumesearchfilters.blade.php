@@ -1,5 +1,5 @@
 <div class="employer-search-block">
-    {!! Form::open(array('route' => 'ResumeSearch','id'=>'kp')) !!}
+    {!! Form::open(array('route' => 'ResumeSearch')) !!}
     <div class="row">
         <div class="col-sm-12">
             <div class="form-group">
@@ -28,8 +28,9 @@
                         @if ($user->industries)
                             <option
                                     value="{{ $user->industries->id }}"
-                                    @if($industry[0] == $user->industries->id) selected = "selected" @endif
+                                    @if($industry[0] == $user->industries->id ) selected = "selected" @endif
                             >
+
                                 {{ $user->industries->industry }}
                             </option>
                         @endif
