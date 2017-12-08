@@ -314,7 +314,7 @@ var visaMapping = {
                 @if($job)
                     <textarea class="form-control click-to-empty" name="description" placeholder="Provide description" required rows="1">{{ $job->description }}</textarea>
                 @else
-                    <textarea class="form-control click-to-empty" name="description" placeholder="Provide description" required rows="1">Provide longer description</textarea>
+                    <textarea class="form-control click-to-empty" name="description" placeholder="Provide description" required rows="1"></textarea>
                 @endif
             </div>
         </div>
@@ -324,7 +324,7 @@ var visaMapping = {
                 @if($job)
                     <textarea class="form-control click-to-empty" name="requirements" placeholder="Provide requirements" required rows="1">{{ $job->requirements }}</textarea>
                 @else
-                    <textarea class="form-control click-to-empty" name="requirements" placeholder="Provide requirements" required rows="1">Provide some requirements</textarea>
+                    <textarea class="form-control click-to-empty" name="requirements" placeholder="Provide requirements" required rows="1"></textarea>
                 @endif
                 </div>
             </div>
