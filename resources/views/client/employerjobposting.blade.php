@@ -33,6 +33,59 @@
     {!! Html::script('assets/unisharp/laravel-ckeditor/ckeditor.js') !!}
     <script type="text/javascript">
 	
+	
+	var cityMapping = {
+  ChooseCountry:["City"],	
+  UAE: ["Abu Dhabi", "Ajman", "Dubai","Fujairah","Sharjah","Umm Al Qaiwain"],
+  SaudiArabia: ["Riyadh", "Jeddah", "Mecca","Al Madinah","Al-Ahsa","Ta'if","Dammam/Khobar","Buraidah","Tabuk"],
+  Oman: ["Muscat", "Zufar"],
+  Qatar: ["Doha"],
+  Kuwait: ["Al Ahmadi", "Al Farwaniyah", "Al Jahra","Kuwait City","Hawally"],
+  Bahrain: ["Manama"]
+}	
+
+
+var visaMapping = {
+  ChooseCountry:["Visa"],
+  UAE: ["Employment Visa", "Employment Visa - Cancelled", "Family Sponsorship Visa","Long Term Visit - 90days","Tourist Visa - 30days","Mission Visa"],
+  SaudiArabia: ["Business Visa - 180 Days", "Employment Visa - Transferable", "Employment Visa - Non-Transferable","Family Sponsorship Visa"],
+  Oman: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Qatar: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Kuwait: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
+  Bahrain: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"]
+}		
+	
+	$('#aa').change(function() {
+  // get the second dropdown
+  $('#bb').html(
+      // get array by the selected value
+      cityMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+  
+  $('#cc').html(
+      // get array by the selected value
+      visaMapping[this.value]
+      // iterate  and generate options
+      .map(function(v) {
+        // generate options with the array element
+        return $('<option/>', {
+          value: v,
+          text: v
+        })
+      })
+    )
+    // trigger change event to generate second select tag initially
+}).change()
+	
+	
 	$('#togg').hide();
 	
 	
@@ -89,7 +142,7 @@
                             });
                         });
                     }
-                    $('#country_id').on('click change', function () {
+                   /* $('#country_id').on('click change', function () {
                         if ($(this).val()) {
                             $.post('async/loadcountryrelateddata/' + $(this).val(), {_token: token}, function (data) {
                                 $('#state_id').html(data.states);
@@ -110,7 +163,7 @@
                                 });
                             });
                         }
-                    });
+                    });*/
                     CKEDITOR.replace('description');
                     CKEDITOR.instances['description'].on('focus', function (evt) {
                         if (isFirst) {

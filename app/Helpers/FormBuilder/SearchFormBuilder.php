@@ -102,7 +102,11 @@ class SearchFormBuilder extends CommonFormBuilder
     public function buildAvailableLocationsListing()
     {
         $statejobs = JobPosting::select('state_id')->where('active_flag', 1)->distinct()->get();
-        return view('forms.availablelocationslisting')->with('statejobs', $statejobs)->render();
+		 $countryjobs = JobPosting::select('country_id')->where('active_flag', 1)->distinct()->get();
+        return view('forms.availablelocationslisting')
+		->with('countryjobs', $countryjobs)
+		->with('statejobs', $statejobs)
+		->render();
     }
 
     /**

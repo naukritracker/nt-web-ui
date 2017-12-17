@@ -11,12 +11,12 @@
 		
   
   
-  <select id="B"  name="state_id" placeholder="city" class="form-control" id="B">
+ <!-- <select id="B"  name="state_id" placeholder="city" class="form-control" id="B">
   <option selected>City<option>
-  </select>
-            <!--{!! Form::select('state_id', $selectstate, null, ['placeholder'=>'City','class'=>'form-control','id'=>'select1' ]) !!}-->
-		<!--	{!! Form::select('state_i', $selectstatesall, null, ['placeholder'=>'City','class'=>'form-control','id'=>'state_i' ]) !!}
-			{!! Form::select('countr', $selectcountry, null, ['placeholder'=>'Country','class'=>'form-control','id'=>'countr','onclick'=>'fos();' ]) !!}-->
+  </select> -->
+            {!! Form::select('state_id',["City"], null, ['placeholder'=>'City','class'=>'form-control','id'=>'B' ]) !!}
+			<!--{!! Form::select('state_i', $selectstatesall, null, ['placeholder'=>'City','class'=>'form-control','id'=>'state_i' ]) !!}
+			{!! Form::select('countr', $selectcountry, null, ['placeholder'=>'Country','class'=>'form-control','id'=>'countr','onclick'=>'fos();' ]) !!}
 			<!-- <select  class='form-control' name="state_id" id="select1" onclick="dropChange1();">
             <option value="0" selected>City</option>
             <option value="1" selected>All</option>
@@ -57,12 +57,12 @@
         </select>-->
         </div>
         <div class="form-group col-sm-2 col-xs-6 hpad5">
-		<select id="C"  name="visa_type" placeholder="city" class="form-control" >
+		<!--<select id="C"  name="visa_type" placeholder="city" class="form-control" >
 		<option selected>Visa<option>
-  </select>
+  </select>-->
 		
 		 <!-- {!! Form::select('visa_type', [], null, ['placeholder'=>'Visa', 'class'=>'form-control','id'=>'visa_i' ,'required']) !!}   -->
-           <!-- {!! Form::select('visa_type', $selectvisa, null, ['placeholder'=>'Visa','id'=>'select2','class'=>'form-control']) !!} -->
+            {!! Form::select('visa_type',["Visa"], null, ['placeholder'=>'Visa','id'=>'C','class'=>'form-control']) !!} 
 			<!--<select class='form-control' name="visa_type" id="select2">
             <option value="0" selected>Visa</option>
 

@@ -83,7 +83,7 @@
                         </li>
                         <li id= "togg">
 
-                      <select class="form-control "  id="select3"  >
+                   <!--   <select class="form-control "  id="select3"  >
                                 <option value="ChooseCountry" selected>Choose Country</option>
                                 <option value="UAE">UAE</option>
                                 <option value="SaudiArabia" >Saudi Arabia</option>
@@ -92,17 +92,16 @@
                                 <option value="Kuwait" >Kuwait</option>
                                 <option value="Bahrain" >Bahrain</option>
                               
-                            </select>
-					  		<!-- <select class="form-control "  id="dropdown" onchange="location=this.value;">
-                                <option value="">Choose Country</option>
-                                <option value="/search/jobs/united-arab-emirates">UAE</option>
-                                <option value="/search/jobs/saudi-arabia" >Saudi Arabia</option>
-                                <option value="/search/jobs/oman" >Oman</option>
-                                <option value="/search/jobs/qatar" >Qatar</option>
-                                <option value="/search/jobs/kuwait" >Kuwait</option>
-                                <option value="/search/jobs/bahrain" >Bahrain</option>
-                                <option value="/search/jobs/all-gulf-countries" >All Gulf Countries</option>
                             </select>-->
+					  		 <select class="form-control "  id="dropdown" >
+                                <option value="">Choose Country</option>
+                               <option value="UAE">UAE</option>
+                                <option value="SaudiArabia" >Saudi Arabia</option>
+                                <option value="Oman" >Oman</option>
+                                <option value="Qatar" >Qatar</option>
+                                <option value="Kuwait" >Kuwait</option>
+                                <option value="Bahrain" >Bahrain</option>
+                            </select>
 					
 							
   
@@ -321,7 +320,7 @@
     {!! Html::script('assets/js/bootstrap.min.js') !!}
     {!! Html::script('assets/js/pnotify.custom-3.min.js') !!}
 
-    <!--<script type="text/javascript">
+    <script type="text/javascript">
 
         var selectedItem = sessionStorage.getItem("SelectedItem");
         $('#dropdown').val(selectedItem);
@@ -332,7 +331,10 @@
             sessionStorage.setItem("SelectedItem", dropVal);
         });
 
-    </script> -->
+		
+		
+
+    </script> 
     <script type="text/javascript">//PNotify.prototype.options.styling = "fontawesome";</script>
     <script type="text/javascript">
         token = $('meta[name="csrf-token"]').attr('content');
@@ -391,7 +393,7 @@ var diction2 = {
   A2: ["B44", "B5", "B6"]
 }
 // bind change event handler
-$('#select3').change(function() {
+$('#dropdown').change(function() {
   // get the second dropdown
   $('#B').html(
       // get array by the selected value
@@ -520,8 +522,8 @@ $( function() {
     function shakeForm(e) {
 
         var x= $('#tags').val();
-        var y= $('#select1').val();
-        var z= $('#select2').val();
+        var y= $('#B').val();
+        var z= $('#C').val();
         var a= $('#exp').val();
         var b= $('#fun_area').val();
         if ((x==null || x=="") &&(y==null || y=="")&&(z==null || z=="")&&(a==null || a=="")&&(b==null || b==""))

@@ -198,9 +198,12 @@
                 
             </div>
         </div>
-<script>
-		var cityMapping = {
-  ChooseCountry:["City"],	
+<script type="text/javascript">
+	
+	
+	
+	var cityMapping = {
+  ChooseCountry:[" Select City"],	
   UAE: ["Abu Dhabi", "Ajman", "Dubai","Fujairah","Sharjah","Umm Al Qaiwain"],
   SaudiArabia: ["Riyadh", "Jeddah", "Mecca","Al Madinah","Al-Ahsa","Ta'if","Dammam/Khobar","Buraidah","Tabuk"],
   Oman: ["Muscat", "Zufar"],
@@ -211,7 +214,7 @@
 
 
 var visaMapping = {
-  ChooseCountry:["Visa"],
+  ChooseCountry:["Select Visa"],
   UAE: ["Employment Visa", "Employment Visa - Cancelled", "Family Sponsorship Visa","Long Term Visit - 90days","Tourist Visa - 30days","Mission Visa"],
   SaudiArabia: ["Business Visa - 180 Days", "Employment Visa - Transferable", "Employment Visa - Non-Transferable","Family Sponsorship Visa"],
   Oman: ["Employment Visa", "Employment Visa - Cancelled","Family Sponsorship Visa","Long Term Visit - 90days","Visit- 30days","Business Visa"],
@@ -249,7 +252,8 @@ var visaMapping = {
     )
     // trigger change event to generate second select tag initially
 }).change()
-</script>
+
+		</script>
 
 </div>
         <div class="col-xs-12 text-center">
@@ -314,7 +318,8 @@ var visaMapping = {
                 @if($job)
                     <textarea class="form-control click-to-empty" name="description" placeholder="Provide description" required rows="1">{{ $job->description }}</textarea>
                 @else
-                    <textarea class="form-control click-to-empty" name="description" placeholder="Provide description" required rows="1"></textarea>
+					<label>Provide longer description</label>
+                    <textarea class="form-control click-to-empty" name="description" placeholder="Provide longer description" required rows="1"></textarea>
                 @endif
             </div>
         </div>

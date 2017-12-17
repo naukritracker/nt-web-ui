@@ -120,7 +120,7 @@
                           @endif
 
                           @if($job->state_id!=0)
-                              <span>{{$job->state->state}} / {{$job->country->country}}</span>
+                              <span>{{$job->state_id}} / {{$job->country->country}}</span>
                           @endif
 
                           @if($job->updated_at)
@@ -217,6 +217,9 @@
 	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
 	<script type="text/javascript">
   // Accordian
+  
+  
+ 
   function clicker()
   {
       window.location="/search/jobs"
